@@ -1,10 +1,12 @@
 <?php
-include 'db.php';
+include 'db.php'; // Verbind met de aangepaste db.php
 
+// Query om partijen met verkiezingstype op te halen
 $sql = "SELECT p.id, p.partijnaam, p.partijleider, v.type 
         FROM partijen p 
         JOIN verkiezing_db.verkiezingstypes v 
         ON p.verkiezingstype_id = v.id";
+
 $result = $partijen_conn->query($sql);
 
 if ($result->num_rows > 0) {
