@@ -3,7 +3,7 @@
 $servername = "localhost";
 $username = "root";
 $password = "";
-$database = "verkiezingen"; 
+$database = "examenopdracht"; // Nieuwe naam van je database
 
 $conn = new mysqli($servername, $username, $password, $database);
 
@@ -17,8 +17,8 @@ if (isset($_POST["insert"])) {
     $naam = $_POST['naam'];
     $partij_id = $_POST['partij_id'];
     $verkiezing_id = $_POST['verkiezing_id'];
-    $positie = $_POST['positie'];  // Bijvoorbeeld een positie-invoer
-    
+    $positie = $_POST['positie'];
+
     // Voeg de nieuwe kandidaat toe aan de 'verkiesbaren' tabel
     $sql = "INSERT INTO verkiesbaren (naam, gecreëerd_op) VALUES (?, NOW())";
     $stmt = $conn->prepare($sql);
