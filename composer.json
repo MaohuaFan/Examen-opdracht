@@ -2,7 +2,7 @@
     "name": "gebruiker/src",
     "autoload": {
         "psr-4": {
-            "src\\": "src/"
+            "Examenopdracht\\": "src/"
         }
     },
     "authors": [
