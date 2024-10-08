@@ -1,6 +1,6 @@
 <?php
-// auteur: studentnaam
-// functie: definitie class Database
+// Auteur: Maohua Fan
+// Functie: Definitie Class Database
 namespace Examenopdracht\classes;
 
 use PDO;
