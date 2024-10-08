@@ -1,0 +1,16 @@
+{
+    "name": "gebruiker/src",
+    "autoload": {
+        "psr-4": {
+            "src\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "M",
+            "email": "90@student.zadkine.nl"
+        }
+    ],
+    "require": {},
+    "include-path": ["include/"]
+}
