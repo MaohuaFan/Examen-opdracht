@@ -1,14 +1,22 @@
 <?php
-// Auteur: Maohua Fan
-// Functie: Definitie Class Verkiezing
-namespace Examenopdracht\classes;
+    // Auteur: Maohua Fan
+    // Functie: Definitie Class Verkiezing
+    namespace Examenopdracht\classes;
 
-use Examenopdracht\classes\Database;
+    use Examenopdracht\classes\Database;
 
-include_once "functions.php";
+    include_once "functions.php";
 
-class Verkiezing extends Database{
+    class Verkiezing extends Database{
+        // Attributes
+        
 
-	
-}
+        // Constructor
+
+
+        // Method
+
+
+            
+    }
 ?>

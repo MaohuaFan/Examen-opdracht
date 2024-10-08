@@ -32,14 +32,14 @@ class Database{
 
 				 self::$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION) ;
 				 self::$conn->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
-				 //echo "Connectie is gelukt <br />" ;
+				//  echo "Connectie is gelukt <br />" ;
 			}
 
 			catch(PDOException $e){
 				 echo "Connectie mislukt: " . $e->getMessage() ;
 			}
 		} else {
-			//echo "Database is al geconnected<br>";
+			// echo "Database is al geconnected<br>";
 		}
 	}
 	
