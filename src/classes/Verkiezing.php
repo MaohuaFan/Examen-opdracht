@@ -34,21 +34,23 @@ class Verkiezing extends Database {
     public function registreerVerkiezing() {
         // Bereid de SQL-query voor
         $query = "INSERT INTO verkiezingen (verkiezingType_ID, Naam, Startdatum, Einddatum) VALUES (?, ?, ?, ?)";
-
+    
         try {
             // Verkrijg de databaseverbinding
             $stmt = $this->getConnection()->prepare($query);
-
+    
             // Voer de query uit met de eigenschappen
             $stmt->execute([$this->verkiezingTypeId, $this->naam, $this->startdatum, $this->einddatum]);
-
+    
             // Retourneer het ID van de nieuwe verkiezing
             return $this->getConnection()->lastInsertId();
         } catch (PDOException $e) {
             // Foutafhandeling
-            return "Fout bij registratie van verkiezing: " . $e->getMessage();
+            error_log("Fout bij registratie van verkiezing: " . $e->getMessage()); // Log fout voor ontwikkelaars
+            return false; // Retourneer false zodat we foutmeldingen kunnen tonen
         }
     }
+    
 
 
     public function getVerkiezingTypes() {
@@ -67,5 +69,29 @@ class Verkiezing extends Database {
             return "Fout bij ophalen van verkiezingstypes: " . $e->getMessage();
         }
     }    
+
+
+    public function Dropdown_VerkiezingType($selectedId = null) {
+        // Haal verkiezingstypes op
+        $verkiezingTypes = $this->getVerkiezingTypes();
+        
+        // Begin met het genereren van de HTML voor de dropdown
+        $html = '<select id="type" name="type" required>';
+        $html .= '<option value="" disabled ' . (is_null($selectedId) ? 'selected' : '') . '>Kies een verkiezingstype</option>';
+        
+        // Loop door de verkiezingstypes en voeg opties toe
+        foreach ($verkiezingTypes as $type) {
+            $isSelected = ($selectedId == $type['VerkiezingType_ID']) ? 'selected' : '';
+            $html .= '<option value="' . htmlspecialchars($type['VerkiezingType_ID']) . '" ' . $isSelected . '>';
+            $html .= htmlspecialchars($type['VerkiezingType_Naam']);
+            $html .= '</option>';
+        }
+        
+        $html .= '</select><br><br>';
+    
+        // Retourneer de HTML voor de dropdown
+        return $html;
+    }
+    
 }
 ?>

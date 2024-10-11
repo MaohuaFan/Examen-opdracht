@@ -1,0 +1,87 @@
+/*Global - Global - Global*/
+*{
+    box-sizing: border-box;
+    /*Padding + Margin*/
+    margin: 0;
+    padding: 0;
+    color: black;
+}
+
+body{
+    /*Color + Text Style*/
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: white;
+}
+
+
+/*Header - Header - Header*/
+/* Style the header */
+header{
+    /*Color + Text Style*/
+    background-color:red;
+    text-align: center;
+    font-size: 1.5vw;
+    /*Padding + Margin*/
+    padding-top: 3.0vh;
+    padding-bottom: 3.0vh;
+    /*Position*/
+    max-width: 100vw;
+    position: sticky;
+    top: 0;
+    left: 0;
+    z-index: 999;
+}
+
+/* Style the navigation menu */
+nav{
+    /*Display*/
+    display: flex;
+    flex-direction: row;
+    justify-content:space-around;
+    z-index: 999;
+}
+
+/* Style the list inside the menu */
+nav ul{
+    /*Display*/
+    display: flex;
+    flex-direction: row;
+    list-style-type: none;
+    justify-content:space-between;
+    z-index: 999;
+}
+
+nav ul li a{
+    /*Color + Text Style*/
+    color: #FFF;
+    text-decoration: none;
+    /*Padding + Margin*/
+    padding: 1vw;
+    margin: 3vw;
+}
+
+main h1{
+    /*Color + Text Style*/
+    color: black;
+    text-decoration: none;
+}
+
+
+/*
+    Crud Table
+*/
+
+table, th, td {
+    background-color: aquamarine;
+    border: 1px solid black;
+}
+
+th{
+    background-color: grey;    
+}
+
+.error-message {
+    color: red;
+    font-weight: bold;
+    margin-top: 10px;
+}

@@ -1,39 +1,46 @@
 <?php
-// auteur: Maohua Fan
-// functie: insert class Verkiezing
+    // Auteur: Maohua Fan
+    // Functie: Insert class Verkiezing
 
-require_once '../../vendor/autoload.php'; // Zorg ervoor dat dit het juiste pad is naar de autoload
+    require_once '../../vendor/autoload.php';
 
-use Examenopdracht\classes\Verkiezing;
+    use Examenopdracht\classes\Verkiezing;
 
-// Maak een instantie van de Verkiezing-klasse
-$verkiezingen = new Verkiezing("", "", "", 0); // Je kunt de parameters hier negeren omdat we ze later instellen
+    // Maak een instantie van de Verkiezing-klasse
+    $verkiezingen = new Verkiezing("", "", "", 0); // Je kunt de parameters hier negeren omdat we ze later instellen
 
-// Verkrijg de verkiezingstypes
-$verkiezingTypes = $verkiezingen->getVerkiezingTypes();
+    // Verkrijg de verkiezingstypes
+    $verkiezingTypes = $verkiezingen->getVerkiezingTypes();
 
-if (isset($_POST["insert"]) && $_POST["insert"] == "Toevoegen") {
-    $verkiezingsnaam = $_POST['naam'];
-    $verkiezingsdatumStart = $_POST['startdatum'];
-    $verkiezingsdatumEind = $_POST['einddatum'];
-    $verkiezingstypeId = $_POST['type'];
+    $foutmelding = "";
 
-    // Maak het Verkiezing-object aan met de juiste parameters
-    $verkiezing = new Verkiezing($verkiezingsnaam, $verkiezingsdatumStart, $verkiezingsdatumEind, $verkiezingstypeId);
+    if (isset($_POST["insert"]) && $_POST["insert"] == "Toevoegen") {
+        $verkiezingsnaam = $_POST['naam'];
+        $verkiezingsdatumStart = $_POST['startdatum'];
+        $verkiezingsdatumEind = $_POST['einddatum'];
+        $verkiezingstypeId = $_POST['type'];
 
-    // Roep de registreerVerkiezing-methode aan
-    $insertedId = $verkiezing->registreerVerkiezing(); 
+        // Validatie: Controleer of de startdatum eerder is dan de einddatum
+        if (strtotime($verkiezingsdatumStart) > strtotime($verkiezingsdatumEind)) {
+            $foutmelding = "De startdatum moet eerder zijn dan de einddatum.";
+        } else {
+            // Maak het Verkiezing-object aan met de juiste parameters
+            $verkiezing = new Verkiezing($verkiezingsnaam, $verkiezingsdatumStart, $verkiezingsdatumEind, $verkiezingstypeId);
 
-    if ($insertedId !== false) {
-        echo "Verkiezing toegevoegd! De nieuwe verkiezing ID is: $insertedId";
-    } else {
-        echo "Er is een fout opgetreden bij het toevoegen van de verkiezing.";
+            // Roep de registreerVerkiezing-methode aan
+            $insertedId = $verkiezing->registreerVerkiezing();
+
+            if ($insertedId !== false) {
+                echo "Verkiezing toegevoegd! De nieuwe verkiezing ID is: $insertedId";
+            } else {
+                $foutmelding = "Er is een fout opgetreden bij het toevoegen van de verkiezing.";
+            }
+        }
     }
-}
 ?>
 
 <!DOCTYPE html>
-<html>
+<html lang="nl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -42,25 +49,25 @@ if (isset($_POST["insert"]) && $_POST["insert"] == "Toevoegen") {
 </head>
 <body>
     <h1>Voeg Verkiezing Toe</h1>
+
+    <!-- Toon foutmelding indien aanwezig -->
+    <?php if (!empty($foutmelding)): ?>
+        <div class="error-message"><?= $foutmelding ?></div>
+    <?php endif; ?>
+
     <form method="post">
         <label for="naam">Verkiezingsnaam:</label>
-        <input type="text" id="naam" name="naam" placeholder="Verkiezingsnaam" required/><br>
+        <input type="text" id="naam" name="naam" placeholder="Verkiezingsnaam" required value="<?= isset($verkiezingsnaam) ? htmlspecialchars($verkiezingsnaam) : ''; ?>"/><br>
 
         <label for="startdatum">Startdatum:</label>
-        <input type="date" id="startdatum" name="startdatum" required/><br>
+        <input type="date" id="startdatum" name="startdatum" required min="<?= date('Y-m-d'); ?>" value="<?= isset($verkiezingsdatumStart) ? $verkiezingsdatumStart : ''; ?>"/><br>
 
         <label for="einddatum">Einddatum:</label>
-        <input type="date" id="einddatum" name="einddatum" required/><br>
+        <input type="date" id="einddatum" name="einddatum" required min="<?= date('Y-m-d'); ?>" value="<?= isset($verkiezingsdatumEind) ? $verkiezingsdatumEind : ''; ?>"/><br>
 
         <label for="type">Verkiezingstype:</label>
-        <select id="type" name="type" required>
-            <option value="" disabled selected>Kies een verkiezingstype</option>
-            <?php foreach ($verkiezingTypes as $type): ?>
-                <option value="<?php echo $type['VerkiezingType_ID']; ?>">
-                    <?php echo htmlspecialchars($type['VerkiezingType_Naam']); ?>
-                </option>
-            <?php endforeach; ?>
-        </select><br><br>
+        <?= $verkiezingen->Dropdown_VerkiezingType(isset($verkiezingstypeId) ? $verkiezingstypeId : null); ?>
+
 
         <input type='submit' name='insert' value='Toevoegen'>
     </form>
