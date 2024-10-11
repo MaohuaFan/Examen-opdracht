@@ -87,7 +87,7 @@ class Verkiezing extends Database {
             $html .= '</option>';
         }
         
-        $html .= '</select><br><br>';
+        $html .= '</select><br>';
     
         // Retourneer de HTML voor de dropdown
         return $html;

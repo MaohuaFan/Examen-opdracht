@@ -44,11 +44,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Voeg Verkiezing Toe</title>
+    <title>Registratie verkiezingen</title>
     <link rel="stylesheet" href="../style.css">
 </head>
 <body>
-    <h1>Voeg Verkiezing Toe</h1>
+    <h1>Registratie Verkiezingen</h1>
 
     <!-- Toon foutmelding indien aanwezig -->
     <?php if (!empty($foutmelding)): ?>
@@ -59,15 +59,14 @@
         <label for="naam">Verkiezingsnaam:</label>
         <input type="text" id="naam" name="naam" placeholder="Verkiezingsnaam" required value="<?= isset($verkiezingsnaam) ? htmlspecialchars($verkiezingsnaam) : ''; ?>"/><br>
 
+        <label for="type">Verkiezingstype:</label>
+        <?= $verkiezingen->Dropdown_VerkiezingType(isset($verkiezingstypeId) ? $verkiezingstypeId : null); ?>
+
         <label for="startdatum">Startdatum:</label>
         <input type="date" id="startdatum" name="startdatum" required min="<?= date('Y-m-d'); ?>" value="<?= isset($verkiezingsdatumStart) ? $verkiezingsdatumStart : ''; ?>"/><br>
 
         <label for="einddatum">Einddatum:</label>
         <input type="date" id="einddatum" name="einddatum" required min="<?= date('Y-m-d'); ?>" value="<?= isset($verkiezingsdatumEind) ? $verkiezingsdatumEind : ''; ?>"/><br>
-
-        <label for="type">Verkiezingstype:</label>
-        <?= $verkiezingen->Dropdown_VerkiezingType(isset($verkiezingstypeId) ? $verkiezingstypeId : null); ?>
-
 
         <input type='submit' name='insert' value='Toevoegen'>
     </form>
