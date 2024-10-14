@@ -40,5 +40,22 @@ class Stemgerechtigde extends Database {
             return "Fout bij registratie van stemgerechtigde: " . $e->getMessage();
         }
     }
+
+
+        // Statische methode om alle stemgerechtigden op te halen
+        public static function getStemgerechtigden() {
+            $db = new Database(); // Maak verbinding met de database
+            $connection = $db->getConnection(); // Verkrijg de databaseverbinding
+    
+            $query = "SELECT * FROM stemgerechtigden"; // SQL-query om stemgerechtigden op te halen
+    
+            try {
+                $stmt = $connection->prepare($query);
+                $stmt->execute();
+                return $stmt->fetchAll(PDO::FETCH_ASSOC); // Retourneert een array van stemgerechtigden
+            } catch (PDOException $e) {
+                return "Fout bij ophalen van stemgerechtigden: " . $e->getMessage();
+            }
+        }
 }
 ?>

@@ -9,12 +9,12 @@ use Examenopdracht\classes\Stemgerechtigde;
 // use Examenopdracht\classes\Kandidaat;
 use Examenopdracht\classes\Stem;
 
-$verkiezing = new Verkiezing();
-$stemgerechtigde = new Stemgerechtigde();
+$verkiezing = new Verkiezing("", "", "", 0);
+$stemgerechtigde = new Stemgerechtigde("", "", "", "", 0);
 // $kandidaat = new Kandidaat();
 
 // Verkrijg de lijst van verkiezingen, stemgerechtigden en kandidaten
-$verkiezingen = $verkiezing->getVerkiezingen();
+$verkiezingen = $verkiezing->getVerkiezing();
 $stemgerechtigden = $stemgerechtigde->getStemgerechtigden(); // Schrijf een methode om alle stemgerechtigden op te halen
 // $kandidaten = $kandidaat->getKandidaten(); // Schrijf een methode om alle kandidaten op te halen
 
