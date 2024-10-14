@@ -4,13 +4,10 @@
 
 namespace Examenopdracht\classes;
 
-// use Examenopdracht\classes\Database;
 use PDO;
 use PDOException;
 
 include_once "Database.php";
-include_once "functions.php";
-
 
 class Verkiezing extends Database {
     // Attributes
@@ -21,11 +18,11 @@ class Verkiezing extends Database {
 
     // Constructor
     public function __construct($naam, $startdatum, $einddatum, $type) {
-        parent::__construct(); // Roept de constructor van de Database-klasse aan
+        parent::__construct();
         $this->naam = $naam;
         $this->startdatum = $startdatum;
         $this->einddatum = $einddatum;
-        $this->verkiezingTypeId = $type; // Zorg ervoor dat dit overeenkomt
+        $this->verkiezingTypeId = $type;
     }
     
     
@@ -34,23 +31,22 @@ class Verkiezing extends Database {
     public function registreerVerkiezing() {
         // Bereid de SQL-query voor
         $query = "INSERT INTO verkiezingen (verkiezingType_ID, Naam, Startdatum, Einddatum) VALUES (?, ?, ?, ?)";
-    
+
         try {
             // Verkrijg de databaseverbinding
             $stmt = $this->getConnection()->prepare($query);
-    
+
             // Voer de query uit met de eigenschappen
             $stmt->execute([$this->verkiezingTypeId, $this->naam, $this->startdatum, $this->einddatum]);
-    
+
             // Retourneer het ID van de nieuwe verkiezing
             return $this->getConnection()->lastInsertId();
         } catch (PDOException $e) {
             // Foutafhandeling
-            error_log("Fout bij registratie van verkiezing: " . $e->getMessage()); // Log fout voor ontwikkelaars
-            return false; // Retourneer false zodat we foutmeldingen kunnen tonen
+            return "Fout bij registratie van verkiezing: " . $e->getMessage();
         }
     }
-    
+
 
 
     public function getVerkiezingTypes() {
@@ -87,6 +83,56 @@ class Verkiezing extends Database {
             $html .= '</option>';
         }
         
+        $html .= '</select><br>';
+    
+        // Retourneer de HTML voor de dropdown
+        return $html;
+    }
+    
+
+
+
+
+    public function getVerkiezing() {
+        // Bereid de SQL-query voor om alle verkiezingen op te halen
+        $query = "SELECT Verkiezing_ID, Naam FROM verkiezingen"; // corrigeer de tabelnaam hier als nodig
+        
+        try {
+            // Verkrijg de databaseverbinding
+            $stmt = $this->getConnection()->prepare($query);
+            $stmt->execute();
+    
+            // Haal de resultaten op en retourneer als een array
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            // Foutafhandeling: retourneer een lege array bij een fout
+            return [];
+        }
+    }
+
+
+    public function Dropdown_Verkiezing($selectedId = null) {
+        // Haal verkiezingen op
+        $verkiezingen = $this->getVerkiezing();
+        
+        // Begin met het genereren van de HTML voor de dropdown
+        $html = '<select id="verkiezing_id" name="verkiezing_id" required>';
+        $html .= '<option value="" disabled ' . (is_null($selectedId) ? 'selected' : '') . '>Kies een verkiezing</option>';
+        
+        // Controleer of er verkiezingen zijn
+        if (!empty($verkiezingen)) {
+            // Loop door de verkiezingen en voeg opties toe
+            foreach ($verkiezingen as $verk) {
+                $isSelected = ($selectedId == $verk['Verkiezing_ID']) ? 'selected' : '';
+                $html .= '<option value="' . htmlspecialchars($verk['Verkiezing_ID']) . '" ' . $isSelected . '>';
+                $html .= htmlspecialchars($verk['Naam']);
+                $html .= '</option>';
+            }
+        } else {
+            // Voeg een optie toe als er geen verkiezingen zijn
+            $html .= '<option value="">Geen verkiezingen beschikbaar</option>';
+        }
+    
         $html .= '</select><br>';
     
         // Retourneer de HTML voor de dropdown
