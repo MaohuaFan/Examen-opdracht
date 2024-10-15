@@ -6,7 +6,7 @@ use PDO;
 use PDOException;
 
 include_once "Database.php";
-class Stem extends Database {
+class Kandidaat extends Database {
     // Attributes
 
     // Constructor

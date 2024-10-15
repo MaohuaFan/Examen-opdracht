@@ -2,12 +2,13 @@
 $servername = "localhost";
 $username = "root";
 $password = "";
-$database = "examenopdracht"; // Zorg ervoor dat deze naam overeenkomt met de aangemaakte database
+$database = "examenopdracht"; // Gebruik je eigen database naam
 
-$conn = new mysqli($servername, $username, $password, $database);
-
-// Controleer de verbinding
-if ($conn->connect_error) {
-    die("Verbinding mislukt: " . $conn->connect_error);
+try {
+    $conn = new PDO("mysql:host=$servername;dbname=$database", $username, $password);
+    // Set PDO error mode to exception
+    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} catch(PDOException $e) {
+    echo "Verbinding mislukt: " . $e->getMessage();
 }
 ?>

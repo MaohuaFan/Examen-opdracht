@@ -1,35 +1,37 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kandidaat Toevoegen</title>
-</head>
-<body>
-    <h1>Voeg een nieuwe kandidaat toe</h1>
-    <form method="POST" action="store.php">
-        <label for="naam">Naam van de kandidaat:</label>
-        <input type="text" id="naam" name="naam" required>
-        
-        <label for="partij_id">Selecteer partij:</label>
-        <select id="partij_id" name="partij_id" required>
-            <option value="">Selecteer een partij</option>
-            <?php
-            include 'db.php'; // Verbind met de database
-            $sqlPartijen = "SELECT id, partijnaam FROM partijen";
-            $resultPartijen = $conn->query($sqlPartijen);
-            if ($resultPartijen->num_rows > 0) {
-                while ($row = $resultPartijen->fetch_assoc()) {
-                    echo '<option value="' . $row['id'] . '">' . $row['partijnaam'] . '</option>';
-                }
-            } else {
-                echo '<option value="">Geen partijen gevonden</option>';
-            }
-            ?>
-        </select>
+<?php
+include 'db.php';
 
-        <input type="submit" value="Toevoegen">
-    </form>
-    <a href="read.php">Bekijk alle kandidaten</a>
-</body>
-</html>
+if (isset($_POST["insert"])) {
+    $naam = $_POST['naam'];
+    $partij_id = $_POST['partij_id'];
+
+    $sql = "INSERT INTO kandidaten (Kandidaat_Naam, Partij_ID) VALUES (:naam, :partij_id)";
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(':naam', $naam);
+    $stmt->bindParam(':partij_id', $partij_id);
+
+    if ($stmt->execute()) {
+        echo "Kandidaat succesvol toegevoegd!";
+    } else {
+        echo "Er is een fout opgetreden.";
+    }
+}
+?>
+
+<!-- HTML Form voor toevoegen van kandidaat -->
+<form method="POST" action="create.php">
+    <label for="naam">Kandidaat Naam:</label>
+    <input type="text" id="naam" name="naam" required><br>
+
+    <label for="partij_id">Selecteer Partij:</label>
+    <select id="partij_id" name="partij_id" required>
+        <?php
+        $partijen = $conn->query("SELECT Partij_ID, Partij_Naam FROM partijen");
+        foreach ($partijen as $partij) {
+            echo "<option value='" . $partij['Partij_ID'] . "'>" . $partij['Partij_Naam'] . "</option>";
+        }
+        ?>
+    </select><br>
+
+    <input type="submit" name="insert" value="Toevoegen">
+</form>
