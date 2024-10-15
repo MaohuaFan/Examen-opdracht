@@ -17,7 +17,7 @@ if (isset($_GET['id'])) {
     $delete_id = $_GET['id'];
 
     // SQL-query om de partij te verwijderen
-    $delete_sql = "DELETE FROM partijen WHERE id = ?";
+    $delete_sql = "DELETE FROM partijen WHERE Partij_ID = ?";
     $delete_stmt = $conn->prepare($delete_sql);
     $delete_stmt->bind_param("i", $delete_id);
     

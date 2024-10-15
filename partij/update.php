@@ -17,7 +17,7 @@ if (isset($_GET['id'])) {
     $partij_id = $_GET['id'];
 
     // Haal de partijgegevens op
-    $sql = "SELECT id, partijnaam FROM partijen WHERE id = ?";
+    $sql = "SELECT Partij_ID, Partij_Naam FROM partijen WHERE Partij_ID = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("i", $partij_id);
     $stmt->execute();
@@ -38,7 +38,7 @@ if (isset($_POST["submit"])) {
     $partijnaam = $_POST['naam'];
 
     // Update query om de partijnaam bij te werken
-    $sqlUpdate = "UPDATE partijen SET partijnaam = ? WHERE id = ?";
+    $sqlUpdate = "UPDATE partijen SET Partij_Naam = ? WHERE Partij_ID = ?";
     $stmtUpdate = $conn->prepare($sqlUpdate);
     $stmtUpdate->bind_param("si", $partijnaam, $partij_id);
 
@@ -68,7 +68,7 @@ if (isset($_POST["submit"])) {
     <h1>Partij Bewerken</h1>
     <form method="POST" action="">
         <label for="naam">Naam van de partij:</label>
-        <input type="text" id="naam" name="naam" required value="<?php echo isset($partij['partijnaam']) ? htmlspecialchars($partij['partijnaam']) : ''; ?>">
+        <input type="text" id="naam" name="naam" required value="<?php echo isset($partij['Partij_Naam']) ? htmlspecialchars($partij['Partij_Naam']) : ''; ?>">
         <input type="submit" name="submit" value="Bijwerken">
     </form>
     <br>

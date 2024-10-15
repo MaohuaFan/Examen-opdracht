@@ -12,13 +12,14 @@ if ($conn->connect_error) {
     die("Verbinding mislukt: " . $conn->connect_error);
 }
 
-// Haal alle partijen op met hun verkiezingstype
+// Haal alle partijen op met hun verkiezingstype en verkiezingsnaam
 $sql = "
-    SELECT p.id, p.partijnaam, vt.type AS verkiezingstype
+    SELECT p.Partij_ID, p.Partij_Naam, vt.VerkiezingType_Naam AS verkiezingstype, v.Naam AS verkiezingsnaam
     FROM partijen p
-    LEFT JOIN verkiesbaren_partijen vp ON p.id = vp.partij_id
-    LEFT JOIN verkiezingen v ON vp.verkiezing_id = v.id
-    LEFT JOIN verkiezingstypes vt ON v.verkiezingstype_id = vt.id
+    LEFT JOIN kandidaten k ON p.Partij_ID = k.Partij_ID
+    LEFT JOIN stemmen s ON k.Kandidaat_ID = s.Kandidaat_ID
+    LEFT JOIN verkiezingen v ON s.Verkiezing_ID = v.Verkiezing_ID
+    LEFT JOIN verkiezingtypes vt ON v.VerkiezingType_ID = vt.VerkiezingType_ID
 ";
 $result = $conn->query($sql);
 ?>
@@ -39,23 +40,25 @@ $result = $conn->query($sql);
             <th>ID</th>
             <th>Partijnaam</th>
             <th>Verkiezingstype</th>
+            <th>Verkiezingsnaam</th>
             <th>Acties</th>
         </tr>
         <?php
         if ($result->num_rows > 0) {
             while ($row = $result->fetch_assoc()) {
                 echo "<tr>";
-                echo "<td>" . $row['id'] . "</td>";
-                echo "<td>" . htmlspecialchars($row['partijnaam']) . "</td>";
+                echo "<td>" . $row['Partij_ID'] . "</td>";
+                echo "<td>" . htmlspecialchars($row['Partij_Naam']) . "</td>";
                 echo "<td>" . htmlspecialchars($row['verkiezingstype'] ? $row['verkiezingstype'] : 'Geen') . "</td>";
+                echo "<td>" . htmlspecialchars($row['verkiezingsnaam'] ? $row['verkiezingsnaam'] : 'Geen verkiezing') . "</td>";
                 echo "<td>
-                        <a href='update.php?id=" . $row['id'] . "'>Bewerken</a> |
-                        <a href='delete.php?id=" . $row['id'] . "' onclick=\"return confirm('Weet je zeker dat je deze partij wilt verwijderen?');\">Verwijderen</a>
+                        <a href='update.php?id=" . $row['Partij_ID'] . "'>Bewerken</a> |
+                        <a href='delete.php?id=" . $row['Partij_ID'] . "' onclick=\"return confirm('Weet je zeker dat je deze partij wilt verwijderen?');\">Verwijderen</a>
                     </td>";
                 echo "</tr>";
             }
         } else {
-            echo "<tr><td colspan='4'>Geen partijen gevonden.</td></tr>";
+            echo "<tr><td colspan='5'>Geen partijen gevonden.</td></tr>";
         }
         ?>
     </table>
