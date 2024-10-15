@@ -10,10 +10,7 @@ if (isset($_GET['id'])) {
     $stmt->execute([':id' => $id]);
     $kandidaat = $stmt->fetch();
 
-    // Haal de lijst met partijen op
-    $sqlPartijen = "SELECT * FROM partijen";
-    $stmtPartijen = $conn->query($sqlPartijen);
-    $partijen = $stmtPartijen->fetchAll();
+
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -47,13 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <label for="Kandidaat_Naam">Kandidaat Naam:</label>
         <input type="text" name="Kandidaat_Naam" value="<?php echo $kandidaat['Kandidaat_Naam']; ?>" required><br>
 
-        <label for="Partij_ID">Partij:</label>
-        <select name="Partij_ID" required>
-            <?php foreach ($partijen as $partij) { ?>
-                <option value="<?php echo $partij['Partij_ID']; ?>" <?php echo ($partij['Partij_ID'] == $kandidaat['Partij_ID']) ? 'selected' : ''; ?>>
-                    <?php echo $partij['Partij_Naam']; ?>
-                </option>
-            <?php } ?>
+       
         </select><br><br>
 
         <button type="submit">Opslaan</button>
