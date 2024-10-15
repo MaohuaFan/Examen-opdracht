@@ -19,6 +19,7 @@ $verkiezingstypesResult = $conn->query($verkiezingstypesSql);
 // Toevoegen van een nieuwe partij
 if (isset($_POST["submit"])) {
     $partijnaam = $_POST['naam'];
+    $verkiezingstype_id = $_POST['verkiezingstype']; // Get selected verkiezingstype
 
     // SQL-query om een nieuwe partij toe te voegen
     $sql = "INSERT INTO partijen (Partij_Naam) VALUES (?)";
@@ -26,6 +27,14 @@ if (isset($_POST["submit"])) {
     $stmt->bind_param("s", $partijnaam);
 
     if ($stmt->execute()) {
+        // Link de partij aan het verkiezingstype (optioneel, afhankelijk van je datamodel)
+        $last_id = $conn->insert_id; // Get last inserted ID for partij
+        $linkSql = "INSERT INTO verkiezingen_partijen (VerkiezingType_ID, Partij_ID) VALUES (?, ?)";
+        $linkStmt = $conn->prepare($linkSql);
+        $linkStmt->bind_param("ii", $verkiezingstype_id, $last_id);
+        $linkStmt->execute();
+        $linkStmt->close();
+
         echo "Partij succesvol toegevoegd!";
     } else {
         echo "Er is een fout opgetreden bij het toevoegen van de partij.";
@@ -52,6 +61,19 @@ if (isset($_POST["submit"])) {
     <form method="POST" action="">
         <label for="naam">Naam van de partij:</label>
         <input type="text" id="naam" name="naam" required>
+
+        <label for="verkiezingstype">Verkiezingstype:</label>
+        <select id="verkiezingstype" name="verkiezingstype" required>
+            <?php
+            if ($verkiezingstypesResult->num_rows > 0) {
+                while ($row = $verkiezingstypesResult->fetch_assoc()) {
+                    echo "<option value='" . $row['VerkiezingType_ID'] . "'>" . htmlspecialchars($row['VerkiezingType_Naam']) . "</option>";
+                }
+            } else {
+                echo "<option value=''>Geen verkiezingstypes beschikbaar</option>";
+            }
+            ?>
+        </select>
 
         <input type="submit" name="submit" value="Toevoegen">
     </form>
