@@ -56,7 +56,7 @@ if (isset($_POST["insert"]) && $_POST["insert"] == "Registreren") {
     <link rel="stylesheet" href="../style.css">
 </head>
 <body>
-    <h1>Registreer Stemgerechtigde</h1>
+    <h1>Registreer</h1>
     <form method="post">
         <label for="bsnNummer">BSN-Nummer:</label>
         <input type="text" id="bsnNummer" name="bsnNummer" required/><br>

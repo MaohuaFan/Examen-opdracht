@@ -72,5 +72,30 @@ class Stemgerechtigde extends Database {
         }
     }
 
+    public function Dropdown_Stemgerechtigde($selectedId = null) {
+    // Haal stemgerechtigden op
+    $stemgerechtigden = $this->getStemgerechtigden(); // Deze methode moet je definiëren om stemgerechtigden op te halen
+    
+    // Begin met het genereren van de HTML voor de dropdown
+    $html = '<select id="stemgerechtigde_id" name="stemgerechtigde_id" required>';
+    $html .= '<option value="" disabled ' . (is_null($selectedId) ? 'selected' : '') . '>Kies een stemgerechtigde</option>';
+    
+    // Controleer of er stemgerechtigden zijn
+    if (!empty($stemgerechtigden)) {
+        foreach ($stemgerechtigden as $stemgerechtigde) {
+            $isSelected = ($selectedId == $stemgerechtigde['Stemgerechtigde_ID']) ? 'selected' : '';
+            $html .= '<option value="' . htmlspecialchars($stemgerechtigde['Stemgerechtigde_ID']) . '" ' . $isSelected . '>';
+            $html .= htmlspecialchars($stemgerechtigde['Naam']);
+            $html .= '</option>';
+        }
+    } else {
+        $html .= '<option value="">Geen stemgerechtigden beschikbaar</option>';
+    }
+    
+    $html .= '</select><br>';
+    
+    return $html;
+}
+
 }
 ?>

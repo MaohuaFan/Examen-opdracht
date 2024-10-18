@@ -9,49 +9,30 @@ use PDOException;
 
 include_once "Database.php";
 
-class Stem extends Database {
-    // Attributes
-    protected $verkiezingId;
+class Stem {
     protected $stemgerechtigdeId;
     protected $kandidaatId;
+    protected $verkiezingId;
 
-    // Constructor
-    public function __construct($verkiezingId, $stemgerechtigdeId, $kandidaatId) {
-        parent::__construct(); // Roept de constructor van de Database-klasse aan
-        $this->verkiezingId = $verkiezingId;
+    public function __construct($stemgerechtigdeId, $kandidaatId, $verkiezingId) {
         $this->stemgerechtigdeId = $stemgerechtigdeId;
         $this->kandidaatId = $kandidaatId;
+        $this->verkiezingId = $verkiezingId;
     }
 
-    // Methode om een stem uit te brengen
-    public function brengStemUit() {
-        $query = "INSERT INTO stemmen (verkiezing_id, stemgerechtigde_id, kandidaat_id) VALUES (?, ?, ?)";
+    // Methode om de stem in te voeren
+    public function registreerStem() {
+        $query = "INSERT INTO stemmen (stemgerechtigde_id, kandidaat_id, verkiezing_id) VALUES (?, ?, ?)";
 
         try {
             $stmt = $this->getConnection()->prepare($query);
-            $stmt->execute([$this->verkiezingId, $this->stemgerechtigdeId, $this->kandidaatId]);
+            $stmt->execute([$this->stemgerechtigdeId, $this->kandidaatId, $this->verkiezingId]);
 
-            return $this->getConnection()->lastInsertId(); // Retourneert het ID van de nieuwe stem
+            return $this->getConnection()->lastInsertId(); // Retourneert het ID van de geregistreerde stem
         } catch (PDOException $e) {
-            return "Fout bij het uitbrengen van stem: " . $e->getMessage();
+            return "Fout bij registratie van stem: " . $e->getMessage();
         }
     }
 }
 
-
-
-
-
-    // Methode om kandidaten op te halen
-    public function getKandidaten() {
-        // Hier definieer je hoe je kandidaten uit de database ophaalt
-        // Voorbeeld:
-        // return Database::query("SELECT * FROM kandidaten WHERE verkiezing_id = ?", [$this->verkiezingId]);
-        // Dit is een placeholder; vervang het door je eigen database query
-        return [
-            ['id' => 1, 'naam' => 'Kandidaat 1'],
-            ['id' => 2, 'naam' => 'Kandidaat 2'],
-            ['id' => 3, 'naam' => 'Kandidaat 3'],
-        ];
-    }
 ?>
