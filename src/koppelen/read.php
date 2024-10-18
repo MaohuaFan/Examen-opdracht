@@ -37,6 +37,6 @@ $kandidaten = $stmt->fetchAll();
     </table>
 
     <br>
-    <a href="insert.php">Voeg een nieuwe kandidaat toe</a>
+    <a href="insert.php">koppel een kandidaat</a>
 </body>
 </html>
