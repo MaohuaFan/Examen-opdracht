@@ -1,4 +1,10 @@
 <?php
+// Directory waar de pagina's worden opgeslagen
+$directory = 'pages/'; // Zorg ervoor dat deze map bestaat en schrijfbaar is
+
+// Variabele om te controleren of de pagina succesvol is aangemaakt
+$pageCreated = false;
+
 // Check of het formulier is verzonden
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Ontvang de gegevens van het formulier
@@ -23,9 +29,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $pageContent .= "</body>\n";
         $pageContent .= "</html>";
 
-        // Sla de inhoud op in een nieuw bestand
-        if (file_put_contents($filename, $pageContent)) {
-            echo "<p>De pagina is succesvol aangemaakt: <a href='$filename'>$filename</a></p>";
+        // Sla de inhoud op in een nieuw bestand in de opgegeven directory
+        if (file_put_contents($directory . $filename, $pageContent)) {
+            $pageCreated = true; // Stel de pagina als succesvol aangemaakt
         } else {
             echo "<p>Er is een fout opgetreden bij het aanmaken van de pagina.</p>";
         }
@@ -44,15 +50,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <body>
     <h1>Maak een nieuwe pagina aan</h1>
 
-    <!-- Formulier om een nieuwe pagina aan te maken -->
-    <form action="insert.php" method="post">
-        <label for="title">Titel van de pagina:</label><br>
-        <input type="text" id="title" name="title" required><br><br>
+    <?php if ($pageCreated): ?>
+        <p>De pagina is succesvol aangemaakt: <a href="<?php echo htmlspecialchars($directory . $filename); ?>"><?php echo htmlspecialchars($filename); ?></a></p>
+    <?php else: ?>
+        <!-- Formulier om een nieuwe pagina aan te maken -->
+        <form action="insert.php" method="post">
+            <label for="title">Titel van de pagina:</label><br>
+            <input type="text" id="title" name="title" required><br><br>
 
-        <label for="content">Inhoud van de pagina:</label><br>
-        <textarea id="content" name="content" rows="10" cols="50" required></textarea><br><br>
+            <label for="content">Inhoud van de pagina:</label><br>
+            <textarea id="content" name="content" rows="10" cols="50" required></textarea><br><br>
 
-        <input type="submit" value="Pagina Aanmaken">
-    </form>
+            <input type="submit" value="Pagina Aanmaken">
+        </form>
+    <?php endif; ?>
+
+    <p><a href="read.php">Terug naar overzicht van pagina's</a></p> <!-- Link terug naar read.php -->
 </body>
 </html>
