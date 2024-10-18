@@ -50,6 +50,11 @@ if (isset($_POST["insert"]) && $_POST["insert"] == "Stem Uitbrengen") {
     <link rel="stylesheet" href="../style.css">
 </head>
 <body>
+    <header>
+        <?php 
+            include '../nav.php'; // Include de navigatiebalk 
+        ?>
+    </header>
     <h1>Stem Uitbrengen</h1>
     <form method="post">
         <input type="hidden" name="stemgerechtigde_id" value="<?= htmlspecialchars($stemgerechtigdeId); ?>">
