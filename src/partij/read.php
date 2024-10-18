@@ -54,6 +54,7 @@ $result = $conn->query($sql);
         }
         ?>
     </table>
+    <a href="../index.php">Terug naar Hoofdpagina</a>
 
 </body>
 </html>
