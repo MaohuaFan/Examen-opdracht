@@ -1,20 +1,16 @@
 <?php
 include 'db.php';
 
-if (isset($_GET['id'])) {
-    $id = $_GET['id'];
+if (isset($_POST['id'])) {
+    $kandidaatID = $_POST['id'];
 
+    // Verwijder de kandidaat uit de database
     $sql = "DELETE FROM kandidaten WHERE Kandidaat_ID = :id";
     $stmt = $conn->prepare($sql);
-    $stmt->bindParam(':id', $id);
-
-    if ($stmt->execute()) {
-        echo "Kandidaat succesvol verwijderd!";
+    if ($stmt->execute(['id' => $kandidaatID])) {
+        echo "success";
     } else {
-        echo "Er is een fout opgetreden.";
+        echo "error";
     }
 }
 ?>
-
-<!-- Link voor verwijderen -->
-<a href="delete.php?id=<?php echo $candidate['Kandidaat_ID']; ?>">Verwijder Kandidaat</a>

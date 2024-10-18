@@ -15,7 +15,7 @@ if (isset($_GET['id'])) {
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $kandidaatNaam = $_POST['Kandidaat_Naam'];
-    $partijID = $_POST['Partij_ID'];
+    $partijID = 1;
     $id = $_POST['Kandidaat_ID'];
 
     // Update de gegevens van de kandidaat
