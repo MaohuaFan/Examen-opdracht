@@ -1,6 +1,6 @@
 <?php
 session_start(); // Start de sessie
-
+include '../nav.php'; // Include de navigatiebalk 
 require 'config.php'; // Verbind met de database
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -18,11 +18,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $_SESSION['user_id'] = $user['Stemgerechtigde_ID'];
         $_SESSION['user_name'] = $user['Naam'];
 
-        // Redirect naar index.html
-        header("Location: ../index.html");
+        // Redirect naar index.php
+        header("Location: ../index.php");
         exit();
     } else {
-        echo "Ongeldige inloggegevens!";
+        echo "<p style='color: red;'>Ongeldige inloggegevens!</p>";
     }
 }
 ?>
