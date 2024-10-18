@@ -66,6 +66,6 @@ $kandidaten = $stmt->fetchAll();
     <a href="insert.php">Nieuwe Kandidaat Toevoegen</a>
     <br>
     <!-- Terug naar hoofdpagina link -->
-    <a href="../index.html">Terug naar Hoofdpagina</a>
+    <a href="../index.php">Terug naar Hoofdpagina</a>
 </body>
 </html>
