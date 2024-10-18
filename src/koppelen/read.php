@@ -41,7 +41,7 @@ $kandidaten = $stmt->fetchAll();
     </table>
 
     <br>
-    <a href="insert.php">koppel een kandidaat</a>
+    <a href="insert.php">koppel een kandidaat</a><br>
     <a href="../index.php">Terug naar Hoofdpagina</a>
 </body>
 </html>
