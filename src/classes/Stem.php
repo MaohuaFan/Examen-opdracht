@@ -1,38 +1,38 @@
 <?php
-// Auteur: Maohua Fan
-// Functie: Definitie Class Stem
-
 namespace Examenopdracht\classes;
 
 use PDO;
 use PDOException;
 
-include_once "Database.php";
-
-class Stem {
+class Stem extends Database {
+    // Attributes
     protected $stemgerechtigdeId;
     protected $kandidaatId;
     protected $verkiezingId;
 
-    public function __construct($stemgerechtigdeId, $kandidaatId, $verkiezingId) {
+    // Constructor
+    public function __construct($stemgerechtigdeId = null, $kandidaatId = null, $verkiezingId = null) {
+        parent::__construct(); // Roept de constructor van de Database-klasse aan
         $this->stemgerechtigdeId = $stemgerechtigdeId;
         $this->kandidaatId = $kandidaatId;
         $this->verkiezingId = $verkiezingId;
     }
 
-    // Methode om de stem in te voeren
+    // Methode om een stem in te voegen
     public function registreerStem() {
-        $query = "INSERT INTO stemmen (stemgerechtigde_id, kandidaat_id, verkiezing_id) VALUES (?, ?, ?)";
-
+        $query = "INSERT INTO stemmen (Stemgerechtigde_ID, Kandidaat_ID, Verkiezing_ID) VALUES (:stemgerechtigdeId, :kandidaatId, :verkiezingId)";
+        
         try {
-            $stmt = $this->getConnection()->prepare($query);
-            $stmt->execute([$this->stemgerechtigdeId, $this->kandidaatId, $this->verkiezingId]);
+            $stmt = $this->getConnection()->prepare($query); // Zorg ervoor dat deze methode bestaat in Database
+            $stmt->bindParam(':stemgerechtigdeId', $this->stemgerechtigdeId);
+            $stmt->bindParam(':kandidaatId', $this->kandidaatId);
+            $stmt->bindParam(':verkiezingId', $this->verkiezingId);
+            $stmt->execute();
 
-            return $this->getConnection()->lastInsertId(); // Retourneert het ID van de geregistreerde stem
+            return $this->getConnection()->lastInsertId(); // Retourneert het ID van de laatst toegevoegde stem
         } catch (PDOException $e) {
             return "Fout bij registratie van stem: " . $e->getMessage();
         }
     }
 }
-
 ?>
