@@ -12,7 +12,7 @@ if (isset($_SESSION['user_id'])) {
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $_POST['email'];
-    $wachtword = $_POST['wachtword'];
+    $wachtwoord = $_POST['wachtwoord'];
 
     // Zoek de gebruiker op e-mailadres
     $stmt = $pdo->prepare("SELECT * FROM stemgerechtigden WHERE email = ?");
@@ -20,7 +20,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $user = $stmt->fetch();
 
     // Controleer of de gebruiker bestaat en het wachtwoord klopt
-    if ($user && password_verify($wachtword, $user['wachtword'])) {
+    if ($user && password_verify($wachtwoord, $user['wachtwoord'])) {
         // Sla de naam en andere gegevens op in de sessie
         $_SESSION['user_id'] = $user['Stemgerechtigde_ID'];
         $_SESSION['user_name'] = $user['Naam'];
@@ -42,7 +42,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <form method="POST" action="login.php">
     E-mail: <input type="email" name="email" required><br>
-    Wachtwoord: <input type="password" name="wachtword" required><br>
+    Wachtwoord: <input type="password" name="wachtwoord" required><br>
     <input type="submit" value="Inloggen">
 </form>
 <p>Heb je nog geen account? <a href="register.php">Maak een account aan</a></p>

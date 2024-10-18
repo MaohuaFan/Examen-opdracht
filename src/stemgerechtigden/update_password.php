@@ -15,7 +15,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $hashed_password = password_hash($new_password, PASSWORD_DEFAULT);
 
         // Update het wachtwoord en verwijder de token
-        $stmt = $pdo->prepare("UPDATE stemgerechtigden SET wachtword = ?, reset_token = NULL, reset_token_expiry = NULL WHERE reset_token = ?");
+        $stmt = $pdo->prepare("UPDATE stemgerechtigden SET wachtwoord = ?, reset_token = NULL, reset_token_expiry = NULL WHERE reset_token = ?");
         $stmt->execute([$hashed_password, $reset_token]);
 
         echo "Je wachtwoord is succesvol bijgewerkt!";

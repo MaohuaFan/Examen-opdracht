@@ -6,11 +6,11 @@ require 'config.php'; // Verbind met de database
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $naam = $_POST['naam'];
     $email = $_POST['email'];
-    $wachtword = password_hash($_POST['wachtword'], PASSWORD_DEFAULT);
+    $wachtwoord = password_hash($_POST['wachtwoord'], PASSWORD_DEFAULT);
 
     // Voeg de nieuwe gebruiker toe aan de database
-    $stmt = $pdo->prepare("INSERT INTO stemgerechtigden (Naam, email, wachtword) VALUES (?, ?, ?)");
-    if ($stmt->execute([$naam, $email, $wachtword])) {
+    $stmt = $pdo->prepare("INSERT INTO stemgerechtigden (Naam, email, wachtwoord) VALUES (?, ?, ?)");
+    if ($stmt->execute([$naam, $email, $wachtwoord])) {
         // Redirect naar de login.html pagina na succesvolle registratie
         header("Location: login.html?register=success");
         exit();
@@ -24,6 +24,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <form method="POST" action="register.php">
     Naam: <input type="text" name="naam" required><br>
     E-mail: <input type="email" name="email" required><br>
-    Wachtwoord: <input type="password" name="wachtword" required><br>
+    Wachtwoord: <input type="password" name="wachtwoord" required><br>
     <input type="submit" value="Registreren">
 </form>
