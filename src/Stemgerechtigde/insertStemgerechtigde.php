@@ -8,42 +8,33 @@ use Examenopdracht\classes\Stemgerechtigde;
 
 if (isset($_POST["insert"]) && $_POST["insert"] == "Registreren") {
     $bsnNummer = $_POST['bsnNummer'];
+    $email = $_POST['email'];
     $naam = $_POST['naam'];
     $wachtwoord = $_POST['wachtwoord'];
     $adres = $_POST['adres'];
     $geboortedatum = $_POST['geboortedatum'];
 
     // Validatie van het BSN-nummer (moet 9 cijfers zijn)
-    if (isset($_POST["insert"]) && $_POST["insert"] == "Registreren") {
-        $bsnNummer = $_POST['bsnNummer'];
-        $naam = $_POST['naam'];
-        $wachtwoord = $_POST['wachtwoord'];
-        $adres = $_POST['adres'];
-        $geboortedatum = $_POST['geboortedatum'];
-    
-        // Validatie van het BSN-nummer (moet 9 cijfers zijn)
-        if (!preg_match('/^\d{9}$/', $bsnNummer)) {
-            echo "Het BSN-nummer moet precies 9 cijfers bevatten.";
+    if (!preg_match('/^\d{9}$/', $bsnNummer)) {
+        echo "Het BSN-nummer moet precies 9 cijfers bevatten.";
+    } else {
+        // Controleer of het BSN-nummer al bestaat
+        if (Stemgerechtigde::exists($bsnNummer)) {
+            echo "Fout: Dit BSN-nummer is al geregistreerd.";
         } else {
-            // Controleer of het BSN-nummer al bestaat
-            if (Stemgerechtigde::exists($bsnNummer)) {
-                echo "Fout: Dit BSN-nummer is al geregistreerd.";
+            // Maak een instantie van Stemgerechtigde
+            $stemgerechtigde = new Stemgerechtigde($bsnNummer, $email, $naam, $wachtwoord, $adres, $geboortedatum);
+
+            // Roep de registreer-methode aan
+            $insertedId = $stemgerechtigde->registreerStemgerechtigde();
+
+            if ($insertedId !== false) {
+                echo "Stemgerechtigde geregistreerd! ID is: $insertedId";
             } else {
-                // Maak een instantie van Stemgerechtigde
-                $stemgerechtigde = new Stemgerechtigde($bsnNummer, $naam, $wachtwoord, $adres, $geboortedatum);
-    
-                // Roep de registreer-methode aan
-                $insertedId = $stemgerechtigde->registreerStemgerechtigde();
-    
-                if ($insertedId !== false) {
-                    echo "Stemgerechtigde geregistreerd! ID is: $insertedId";
-                } else {
-                    echo "Fout bij registratie.";
-                }
+                echo "Fout bij registratie.";
             }
         }
     }
-    
 }
 ?>
 
@@ -56,10 +47,13 @@ if (isset($_POST["insert"]) && $_POST["insert"] == "Registreren") {
     <link rel="stylesheet" href="../style.css">
 </head>
 <body>
-    <h1>Registreer</h1>
+    <h1>Account Registreren</h1>
     <form method="post">
         <label for="bsnNummer">BSN-Nummer:</label>
         <input type="text" id="bsnNummer" name="bsnNummer" required/><br>
+
+        <label for="email">E-mail:</label>
+        <input type="email" id="email" name="email" required/><br>
 
         <label for="naam">Naam:</label>
         <input type="text" id="naam" name="naam" required/><br>
