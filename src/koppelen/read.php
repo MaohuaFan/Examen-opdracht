@@ -3,7 +3,7 @@ require 'db.php';
 
 // Haal alle kandidaten en hun bijbehorende partij op
 $stmt = $pdo->query('
-    SELECT kandidaten.Kandidaat_Naam, partijen.Partij_Naam 
+    SELECT kandidaten.Kandidaat_ID, kandidaten.Kandidaat_Naam, partijen.Partij_Naam 
     FROM kandidaten 
     INNER JOIN partijen ON kandidaten.Partij_ID = partijen.Partij_ID
 ');
@@ -24,6 +24,7 @@ $kandidaten = $stmt->fetchAll();
             <tr>
                 <th>Kandidaat Naam</th>
                 <th>Partij Naam</th>
+                <th>Bewerk</th>
             </tr>
         </thead>
         <tbody>
@@ -31,6 +32,9 @@ $kandidaten = $stmt->fetchAll();
                 <tr>
                     <td><?php echo htmlspecialchars($kandidaat['Kandidaat_Naam']); ?></td>
                     <td><?php echo htmlspecialchars($kandidaat['Partij_Naam']); ?></td>
+                    <td>
+                        <a href="update.php?id=<?php echo $kandidaat['Kandidaat_ID']; ?>">Bewerken</a>
+                    </td>
                 </tr>
             <?php endforeach; ?>
         </tbody>
