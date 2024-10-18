@@ -47,6 +47,11 @@ if (isset($_POST["insert"]) && $_POST["insert"] == "Registreren") {
     <link rel="stylesheet" href="../style.css">
 </head>
 <body>
+    <header>
+        <?php 
+            include '../nav.php'; // Include de navigatiebalk 
+        ?>
+    </header>
     <h1>Account Registreren</h1>
     <form method="post">
         <label for="bsnNummer">BSN-Nummer:</label>
