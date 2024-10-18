@@ -1,21 +1,29 @@
 <?php
 // Auteur: Maohua Fan
-// Functie: Insert class Stem
+// Functie: Insert Stemmen
+
+session_start();
 
 require_once '../../vendor/autoload.php';
 
 use Examenopdracht\classes\Stem;
-use Examenopdracht\classes\Stemgerechtigde;
 use Examenopdracht\classes\Kandidaat;
 use Examenopdracht\classes\Verkiezing;
 
-// Verkrijg de verkiezingen, stemgerechtigden en kandidaten
-$verkiezingen = new Verkiezing("", "", "", 0);
-$stemgerechtigden = new Stemgerechtigde("", "", "", "", "");
-$kandidaten = new Kandidaat("", "", "", "", "");
+// Controleer of de gebruiker is ingelogd
+if (!isset($_SESSION['stemgerechtigde_id'])) {
+    echo "Je moet ingelogd zijn om te stemmen.";
+    exit; // Stop de uitvoering als de gebruiker niet is ingelogd
+}
+
+// Haal de ID van de ingelogde stemgerechtigde op
+$stemgerechtigdeId = $_SESSION['stemgerechtigde_id'];
+
+// Verkrijg de verkiezingen en kandidaten
+$kandidaten = new Kandidaat();
+$verkiezingen = new Verkiezing();
 
 if (isset($_POST["insert"]) && $_POST["insert"] == "Stem Uitbrengen") {
-    $stemgerechtigdeId = $_POST['stemgerechtigde_id'];
     $kandidaatId = $_POST['kandidaat_id'];
     $verkiezingId = $_POST['verkiezing_id'];
 
@@ -44,8 +52,7 @@ if (isset($_POST["insert"]) && $_POST["insert"] == "Stem Uitbrengen") {
 <body>
     <h1>Stem Uitbrengen</h1>
     <form method="post">
-        <label for="stemgerechtigde_id">Stemgerechtigde:</label>
-        <?= $stemgerechtigden->Dropdown_Stemgerechtigde(); ?>
+        <input type="hidden" name="stemgerechtigde_id" value="<?= htmlspecialchars($stemgerechtigdeId); ?>">
 
         <label for="kandidaat_id">Kandidaat:</label>
         <?= $kandidaten->Dropdown_Kandidaat(); ?>
