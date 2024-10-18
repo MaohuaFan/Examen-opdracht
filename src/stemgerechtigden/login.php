@@ -20,7 +20,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $user = $stmt->fetch();
 
     // Controleer of de gebruiker bestaat en het wachtwoord klopt
-    if ($user && password_verify($wachtwoord, $user['wachtwoord'])) {
+    if ($user && $wachtwoord === $user['wachtwoord']) {
         // Sla de naam en andere gegevens op in de sessie
         $_SESSION['user_id'] = $user['Stemgerechtigde_ID'];
         $_SESSION['user_name'] = $user['Naam'];
