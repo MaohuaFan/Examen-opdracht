@@ -11,17 +11,17 @@ use Examenopdracht\classes\Kandidaat;
 use Examenopdracht\classes\Verkiezing;
 
 // Controleer of de gebruiker is ingelogd
-if (!isset($_SESSION['stemgerechtigde_id'])) {
+if (!isset($_SESSION['user_id'])) {
     echo "Je moet ingelogd zijn om te stemmen.";
     exit; // Stop de uitvoering als de gebruiker niet is ingelogd
 }
 
 // Haal de ID van de ingelogde stemgerechtigde op
-$stemgerechtigdeId = $_SESSION['stemgerechtigde_id'];
+$stemgerechtigdeId = $_SESSION['user_id'];
 
 // Verkrijg de verkiezingen en kandidaten
 $kandidaten = new Kandidaat();
-$verkiezingen = new Verkiezing();
+$verkiezingen = new Verkiezing("", "", "", 0);
 
 if (isset($_POST["insert"]) && $_POST["insert"] == "Stem Uitbrengen") {
     $kandidaatId = $_POST['kandidaat_id'];
@@ -30,13 +30,18 @@ if (isset($_POST["insert"]) && $_POST["insert"] == "Stem Uitbrengen") {
     // Maak een instantie van Stem
     $stem = new Stem($stemgerechtigdeId, $kandidaatId, $verkiezingId);
 
-    // Roep de registreerStem-methode aan
-    $insertedId = $stem->registreerStem();
-
-    if ($insertedId !== false) {
-        echo "Stem succesvol uitgebracht! ID van de stem is: $insertedId";
+    // Controleer of de stemgerechtigde al heeft gestemd
+    if ($stem->heeftAlGestemd($stemgerechtigdeId, $verkiezingId)) {
+        echo "<p style='color: red;'>Je hebt al een stem uitgebracht voor deze verkiezing.</p>";
     } else {
-        echo "Fout bij het uitbrengen van de stem.";
+        // Roep de registreerStem-methode aan
+        $insertedId = $stem->registreerStem();
+
+        if ($insertedId !== false) {
+            echo "Stem succesvol uitgebracht! ID van de stem is: $insertedId";
+        } else {
+            echo "<p style='color: red;'>Fout bij het uitbrengen van de stem.</p>";
+        }
     }
 }
 ?>

@@ -34,5 +34,24 @@ class Stem extends Database {
             return "Fout bij registratie van stem: " . $e->getMessage();
         }
     }
+
+
+    public function heeftAlGestemd() {
+        // Controleer of er al een stem is geregistreerd voor de huidige stemgerechtigde en verkiezing
+        $query = "SELECT * FROM stemmen WHERE Stemgerechtigde_ID = :stemgerechtigdeId AND Verkiezing_ID = :verkiezingId";
+        
+        try {
+            $stmt = $this->getConnection()->prepare($query);
+            $stmt->bindParam(':stemgerechtigdeId', $this->stemgerechtigdeId);
+            $stmt->bindParam(':verkiezingId', $this->verkiezingId);
+            $stmt->execute();
+    
+            return $stmt->rowCount() > 0; // Retourneer true als er al een stem is
+        } catch (PDOException $e) {
+            // Hier kun je beslissen hoe je wilt omgaan met fouten, bijvoorbeeld door een logbericht te schrijven
+            return false; // Of throw new Exception("Error: " . $e->getMessage());
+        }
+    }
+    
 }
 ?>
