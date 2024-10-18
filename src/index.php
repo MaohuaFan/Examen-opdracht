@@ -41,13 +41,6 @@ session_start(); // Start de sessie
             <li class="nav-item">
                 <a class="nav-link" href="koppelen/read.php">Koppelen Kandidaten</a>
             </li>
-<<<<<<< HEAD
-            <li class="nav-item">
-                <a class="nav-link" href="../src/Pagina/read.php">Pagina aanmaken</a>
-            </li>
-=======
-            
->>>>>>> 2c91e6176cbe105d54ab9afea51c0cf7fb6a5bf2
             <?php if (isset($_SESSION['user_id'])): ?>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
