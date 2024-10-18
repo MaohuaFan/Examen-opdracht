@@ -1,16 +1,14 @@
 <?php
 include 'db.php';
 
-// Haal alle kandidaten op
-$sql = "SELECT kandidaten.Kandidaat_ID, kandidaten.Kandidaat_Naam, partijen.Partij_Naam 
-        FROM kandidaten 
-        LEFT JOIN partijen ON kandidaten.Partij_ID = partijen.Partij_ID";
+// Haal alle kandidaten op zonder partijnaam
+$sql = "SELECT Kandidaat_ID, Kandidaat_Naam FROM kandidaten";
 $stmt = $conn->query($sql);
 $kandidaten = $stmt->fetchAll();
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="nl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -47,7 +45,6 @@ $kandidaten = $stmt->fetchAll();
         <thead>
             <tr>
                 <th>Kandidaat Naam</th>
-                <th>Partij Naam</th>
                 <th>Acties</th>
             </tr>
         </thead>
@@ -55,7 +52,6 @@ $kandidaten = $stmt->fetchAll();
             <?php foreach ($kandidaten as $kandidaat): ?>
                 <tr>
                     <td><?php echo $kandidaat['Kandidaat_Naam']; ?></td>
-                    <td><?php echo $kandidaat['Partij_Naam']; ?></td>
                     <td>
                         <a href="update.php?id=<?php echo $kandidaat['Kandidaat_ID']; ?>">Bewerken</a> |
                         <!-- Voeg onclick-event toe voor AJAX-verwijdering -->
@@ -68,8 +64,7 @@ $kandidaten = $stmt->fetchAll();
     </table>
     <br>
     <a href="insert.php">Nieuwe Kandidaat Toevoegen</a>
-<br>
-
+    <br>
     <!-- Terug naar hoofdpagina link -->
     <a href="../index.html">Terug naar Hoofdpagina</a>
 </body>

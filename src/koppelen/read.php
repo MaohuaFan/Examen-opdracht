@@ -24,7 +24,7 @@ $kandidaten = $stmt->fetchAll();
             <tr>
                 <th>Kandidaat Naam</th>
                 <th>Partij Naam</th>
-                <th>Bewerk</th>
+                <th>Bewerken</th>
             </tr>
         </thead>
         <tbody>
