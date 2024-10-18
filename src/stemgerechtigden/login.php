@@ -1,7 +1,14 @@
 <?php
 session_start(); // Start de sessie
-include '../nav.php'; // Include de navigatiebalk 
+
 require 'config.php'; // Verbind met de database
+
+// Debug: Controleer of de include werkt
+if (isset($_SESSION['user_id'])) {
+    echo "<p>User is logged in as: " . htmlspecialchars($_SESSION['user_name']) . "</p>";
+} else {
+    echo "<p>User is not logged in</p>";
+}
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $_POST['email'];
@@ -26,8 +33,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 ?>
-
+<header>
+    <?php 
+    include '../nav.php'; // Include de navigatiebalk 
+    ?>
+</header>
 <h2>Inloggen</h2>
+
 <form method="POST" action="login.php">
     E-mail: <input type="email" name="email" required><br>
     Wachtwoord: <input type="password" name="wachtword" required><br>
