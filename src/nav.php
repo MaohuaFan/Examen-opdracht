@@ -22,7 +22,7 @@
                 <a class="nav-link" href="../koppelen/read.php">Koppelen Kandidaten</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="../src/Pagina/read.php">Pagina aanmaken</a>
+                <a class="nav-link" href="../Pagina/read.php">Pagina aanmaken</a>
             </li>
             <?php if (isset($_SESSION['user_id'])): ?>
                 <li class="nav-item dropdown">
@@ -30,7 +30,7 @@
                         <?php echo htmlspecialchars($_SESSION['user_name']); ?>
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="profiel.php">Mijn Profiel</a>
+                        <a class="dropdown-item" href="../stemgerechtigden/profiel.php">Mijn Profiel</a>
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="../stemgerechtigden/logout.php">Uitloggen</a>
                     </div>

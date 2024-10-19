@@ -1,3 +1,5 @@
+<?php include '../nav.php'; // Navigatiebalk ?>
+
 <?php
 require 'db.php';
 
@@ -42,6 +44,6 @@ $kandidaten = $stmt->fetchAll();
 
     <br>
     <a href="insert.php">koppel een kandidaat</a><br>
-    <a href="../index.php">Terug naar Hoofdpagina</a>
+
 </body>
 </html>

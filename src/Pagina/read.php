@@ -1,3 +1,5 @@
+<?php include '../nav.php'; // Navigatiebalk ?>
+
 <?php
 // Directory waar de pagina's zijn opgeslagen
 $directory = 'pages/'; // Zorg ervoor dat deze map bestaat

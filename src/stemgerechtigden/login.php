@@ -1,14 +1,6 @@
 <?php
-session_start(); // Start de sessie
-
+session_start();
 require 'config.php'; // Verbind met de database
-
-// Debug: Controleer of de include werkt
-if (isset($_SESSION['user_id'])) {
-    echo "<p>User is logged in as: " . htmlspecialchars($_SESSION['user_name']) . "</p>";
-} else {
-    echo "<p>User is not logged in</p>";
-}
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $_POST['email'];
@@ -20,7 +12,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $user = $stmt->fetch();
 
     // Controleer of de gebruiker bestaat en het wachtwoord klopt
-    if ($user && $wachtwoord === $user['wachtwoord']) {
+    if ($user && $wachtwoord === $user['wachtwoord']) { // Geen hashing meer
         // Sla de naam en andere gegevens op in de sessie
         $_SESSION['user_id'] = $user['Stemgerechtigde_ID'];
         $_SESSION['user_name'] = $user['Naam'];
@@ -33,16 +25,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 ?>
-<header>
-    <?php 
-    include '../nav.php'; // Include de navigatiebalk 
-    ?>
-</header>
-<h2>Inloggen</h2>
 
+<h2>Inloggen</h2>
 <form method="POST" action="login.php">
     E-mail: <input type="email" name="email" required><br>
     Wachtwoord: <input type="password" name="wachtwoord" required><br>
     <input type="submit" value="Inloggen">
 </form>
-<p>Heb je nog geen account? <a href="register.php">Maak een account aan</a></p>
+<p>Wachtwoord vergeten? <a href="reset_password.php">Reset je wachtwoord</a></p>

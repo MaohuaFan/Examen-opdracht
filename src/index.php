@@ -30,7 +30,7 @@ session_start(); // Start de sessie
     <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ml-auto">
             <li class="nav-item">
-                <a class="nav-link" href="../index.php">Home</a>
+                <a class="nav-link" href="../src/index.php">Home</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="partij/read.php">Bekijk Partijen</a>
@@ -50,7 +50,7 @@ session_start(); // Start de sessie
                         <?php echo htmlspecialchars($_SESSION['user_name']); ?>
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="profiel.php">Mijn Profiel</a>
+                        <a class="dropdown-item" href="stemgerechtigden/profiel.php">Mijn Profiel</a>
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="stemgerechtigden/logout.php">Uitloggen</a>
                     </div>

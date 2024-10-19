@@ -19,6 +19,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 ?>
+<?php include '../nav.php'; // Navigatiebalk ?>
 
 <h2>Account aanmaken</h2>
 <form method="POST" action="register.php">

@@ -1,3 +1,5 @@
+<?php include '../nav.php'; // Navigatiebalk ?>
+
 <?php
 // Verbinding maken met de database
 $servername = "localhost";
