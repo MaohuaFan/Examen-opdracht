@@ -33,3 +33,4 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <input type="submit" value="Inloggen">
 </form>
 <p>Wachtwoord vergeten? <a href="reset_password.php">Reset je wachtwoord</a></p>
+<p>Account Registreren? <a href="../Stemgerechtigde/insertStemgerechtigde.php">Account Aanmaken</a></p>

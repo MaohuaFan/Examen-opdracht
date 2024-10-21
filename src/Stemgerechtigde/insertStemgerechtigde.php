@@ -2,6 +2,7 @@
 // Auteur: Maohua Fan
 // Functie: Insert class Stemgerechtigde
 
+session_start();
 require_once '../../vendor/autoload.php';
 
 use Examenopdracht\classes\Stemgerechtigde;

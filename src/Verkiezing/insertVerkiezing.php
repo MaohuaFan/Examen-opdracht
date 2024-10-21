@@ -2,6 +2,7 @@
     // Auteur: Maohua Fan
     // Functie: Insert class Verkiezing
 
+    session_start();
     require_once '../../vendor/autoload.php';
 
     use Examenopdracht\classes\Verkiezing;
