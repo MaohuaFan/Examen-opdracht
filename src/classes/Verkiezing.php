@@ -110,34 +110,50 @@ class Verkiezing extends Database {
         }
     }
 
+    // In Verkiezing.php
+    public function getActieveVerkiezingen() {
+        $query = "SELECT * FROM verkiezingen WHERE :huidigeDatum BETWEEN Startdatum AND Einddatum";
+        $huidigeDatum = date('Y-m-d');
+        
+        try {
+            $stmt = $this->getConnection()->prepare($query);
+            $stmt->bindParam(':huidigeDatum', $huidigeDatum);
+            $stmt->execute();
 
-    public function Dropdown_Verkiezing($selectedId = null) {
-        // Haal verkiezingen op
-        $verkiezingen = $this->getVerkiezing();
-        
-        // Begin met het genereren van de HTML voor de dropdown
-        $html = '<select id="verkiezing_id" name="verkiezing_id" required>';
-        $html .= '<option value="" disabled ' . (is_null($selectedId) ? 'selected' : '') . '>Kies een verkiezing</option>';
-        
-        // Controleer of er verkiezingen zijn
-        if (!empty($verkiezingen)) {
-            // Loop door de verkiezingen en voeg opties toe
-            foreach ($verkiezingen as $verk) {
-                $isSelected = ($selectedId == $verk['Verkiezing_ID']) ? 'selected' : '';
-                $html .= '<option value="' . htmlspecialchars($verk['Verkiezing_ID']) . '" ' . $isSelected . '>';
-                $html .= htmlspecialchars($verk['Naam']);
-                $html .= '</option>';
-            }
-        } else {
-            // Voeg een optie toe als er geen verkiezingen zijn
-            $html .= '<option value="">Geen verkiezingen beschikbaar</option>';
+            return $stmt->fetchAll(PDO::FETCH_ASSOC); // Retourneer alle actieve verkiezingen
+        } catch (PDOException $e) {
+            return [];
         }
-    
-        $html .= '</select><br>';
-    
-        // Retourneer de HTML voor de dropdown
-        return $html;
     }
+
+
+    // public function Dropdown_Verkiezing($selectedId = null) {
+    //     // Haal verkiezingen op
+    //     $verkiezingen = $this->getVerkiezing();
+        
+    //     // Begin met het genereren van de HTML voor de dropdown
+    //     $html = '<select id="verkiezing_id" name="verkiezing_id" required>';
+    //     $html .= '<option value="" disabled ' . (is_null($selectedId) ? 'selected' : '') . '>Kies een verkiezing</option>';
+        
+    //     // Controleer of er verkiezingen zijn
+    //     if (!empty($verkiezingen)) {
+    //         // Loop door de verkiezingen en voeg opties toe
+    //         foreach ($verkiezingen as $verk) {
+    //             $isSelected = ($selectedId == $verk['Verkiezing_ID']) ? 'selected' : '';
+    //             $html .= '<option value="' . htmlspecialchars($verk['Verkiezing_ID']) . '" ' . $isSelected . '>';
+    //             $html .= htmlspecialchars($verk['Naam']);
+    //             $html .= '</option>';
+    //         }
+    //     } else {
+    //         // Voeg een optie toe als er geen verkiezingen zijn
+    //         $html .= '<option value="">Geen verkiezingen beschikbaar</option>';
+    //     }
+    
+    //     $html .= '</select><br>';
+    
+    //     // Retourneer de HTML voor de dropdown
+    //     return $html;
+    // }
     
 }
 ?>

@@ -67,5 +67,21 @@ class Kandidaat extends Database {
         // Retourneer de HTML voor de dropdown
         return $html;
     }
+
+    public function getKandidatenVoorVerkiezing($verkiezingId) {
+        $query = "SELECT kandidaten.Kandidaat_ID, kandidaten.Kandidaat_Naam as KandidaatNaam, partijen.Partij_Naam as PartijNaam
+                  FROM kandidaten
+                  JOIN partijen ON kandidaten.Partij_ID = partijen.Partij_ID
+				  WHERE kandidaten.Verkiesbaar = 1";
+        
+        try {
+            $stmt = $this->getConnection()->prepare($query);
+            $stmt->execute();
+    
+            return $stmt->fetchAll(PDO::FETCH_ASSOC); // Retourneer alle kandidaten met partijinformatie
+        } catch (PDOException $e) {
+            return [];
+        }
+    }
 }
 ?>
