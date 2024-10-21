@@ -110,7 +110,54 @@ class Verkiezing extends Database {
         }
     }
 
-    // In Verkiezing.php
+    public function publiceerUitslag($verkiezingId) {
+        $query = "UPDATE verkiezingen SET is_gepubliceerd = 1 WHERE Verkiezing_ID = :verkiezingId";
+        
+        try {
+            $stmt = $this->getConnection()->prepare($query);
+            $stmt->bindParam(':verkiezingId', $verkiezingId);
+            $stmt->execute();
+            return true;
+        } catch (PDOException $e) {
+            return false;
+        }
+    }
+
+    public function getOpkomstPercentage($stad, $verkiezingId) {
+        $query = "
+            SELECT
+                COUNT(s.stemgerechtigde_id) AS aantal_uitgebrachte_stemmen,
+                (SELECT COUNT(*) FROM stemgerechtigden WHERE stad = :stad) AS totaal_stemgerechtigden,
+                (COUNT(s.stemgerechtigde_id) / (SELECT COUNT(*) FROM stemgerechtigden WHERE stad = :stad)) * 100 AS opkomstpercentage
+            FROM stemmen s
+            JOIN stemgerechtigden g ON s.stemgerechtigde_id = g.stemgerechtigde_id
+            WHERE g.stad = :stad
+            AND s.verkiezing_id = :verkiezingId";
+        
+        try {
+            $stmt = $this->getConnection()->prepare($query);
+            $stmt->bindParam(':stad', $stad);
+            $stmt->bindParam(':verkiezingId', $verkiezingId);
+            $stmt->execute();
+            return $stmt->fetch(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            return false;
+        }
+    }
+
+    public function getAlleVerkiezingen() {
+    $query = "SELECT Verkiezing_ID, Verkiezing_Naam, is_gepubliceerd FROM verkiezingen";
+    
+    try {
+        $stmt = $this->getConnection()->prepare($query);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    } catch (PDOException $e) {
+        return [];
+    }
+}
+
+
     public function getActieveVerkiezingen() {
         $query = "SELECT * FROM verkiezingen WHERE :huidigeDatum BETWEEN Startdatum AND Einddatum";
         $huidigeDatum = date('Y-m-d');
