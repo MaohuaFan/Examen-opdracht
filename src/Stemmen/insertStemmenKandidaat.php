@@ -69,5 +69,6 @@ if (isset($_POST['insert']) && $_POST['insert'] == "Stem Uitbrengen") {
 
         <input type="submit" name="insert" value="Stem Uitbrengen">
     </form>
+    <a href="insertStemmenVerkiezing.php">Terug naar Verkiezingen</a>
 </body>
 </html>
