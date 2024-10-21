@@ -48,6 +48,9 @@
     <link rel="stylesheet" href="../style.css">
 </head>
 <body>
+    <header>
+        <?php include '../nav.php'; ?>
+    </header>
     <h1>Registratie Verkiezingen</h1>
 
     <!-- Toon foutmelding indien aanwezig -->
