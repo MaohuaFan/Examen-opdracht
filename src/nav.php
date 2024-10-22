@@ -30,6 +30,12 @@
             <li class="nav-item">
                 <a class="nav-link" href="../Stemmen/insertStemmenVerkiezing.php">Stemmen</a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link" href="../Stemmen/opkomstPercentage.php">opkomstPercentage</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="../Stemmen/uitslagPubliceren.php">uitslagPubliceren</a>
+            </li>
             <li>
              <a class="nav-link" href="../goedkeuren_partijen/test.php">goedkeuren_partijen</a>
             </li>

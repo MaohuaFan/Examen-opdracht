@@ -3,19 +3,13 @@ session_start();
 require_once '../../vendor/autoload.php';
 use Examenopdracht\classes\Verkiezing;
 
-// Controleer of de gebruiker een medewerker is
-// if (!isset($_SESSION['is_medewerker']) || $_SESSION['is_medewerker'] !== true) {
-//     echo "Je moet ingelogd zijn als medewerker om deze pagina te bekijken.";
-//     exit;
-// }
-
 $verkiezing = new Verkiezing("", "", "", 0);
 
 // Haal de steden op
 $steden = $verkiezing->getAlleSteden();
 
 if (isset($_POST['stad']) && isset($_POST['verkiezing_id'])) {
-    $stad = $_POST['stad'];
+    $stad = $_POST['stad']; // Dit is de geselecteerde stad
     $verkiezingId = $_POST['verkiezing_id'];
     
     $opkomstInfo = $verkiezing->getOpkomstPercentage($stad, $verkiezingId);
@@ -30,14 +24,17 @@ if (isset($_POST['stad']) && isset($_POST['verkiezing_id'])) {
     <title>Opkomst Percentage</title>
 </head>
 <body>
+<header>
+        <?php include '../nav.php'; ?>
+    </header>
     <h1>Opkomst Percentage Per Stad</h1>
     <form method="post" action="">
         <label for="stad">Selecteer Stad:</label>
         <select name="stad" id="stad" required>
             <option value="">Selecteer een stad</option>
-            <?php foreach ($steden as $stad): ?>
-                <option value="<?= htmlspecialchars($stad['Stad']); ?>">
-                    <?= htmlspecialchars($stad['Stad']); ?>
+            <?php foreach ($steden as $stadItem): ?>
+                <option value="<?= htmlspecialchars($stadItem['Stad']); ?>">
+                    <?= htmlspecialchars($stadItem['Stad']); ?>
                 </option>
             <?php endforeach; ?>
         </select>
@@ -46,9 +43,9 @@ if (isset($_POST['stad']) && isset($_POST['verkiezing_id'])) {
         <select name="verkiezing_id" id="verkiezing_id">
             <?php 
             $verkiezingen = $verkiezing->getAlleVerkiezingen();
-            foreach ($verkiezingen as $verkiezing) : ?>
-                <option value="<?= $verkiezing['Verkiezing_ID']; ?>">
-                    <?= htmlspecialchars($verkiezing['Verkiezing_Naam']); ?>
+            foreach ($verkiezingen as $verkiezingItem) : ?>
+                <option value="<?= $verkiezingItem['Verkiezing_ID']; ?>">
+                    <?= htmlspecialchars($verkiezingItem['Verkiezing_Naam']); ?>
                 </option>
             <?php endforeach; ?>
         </select>
@@ -56,7 +53,7 @@ if (isset($_POST['stad']) && isset($_POST['verkiezing_id'])) {
     </form>
 
     <?php if (isset($opkomstInfo)) : ?>
-        <h2>Opkomst voor <?= htmlspecialchars($stad); ?></h2>
+        <h2>Opkomst voor <?= htmlspecialchars($stad); ?></h2> <!-- Zorg ervoor dat hier de geselecteerde stad is -->
         <p>Aantal uitgebrachte stemmen: <?= $opkomstInfo['aantal_uitgebrachte_stemmen']; ?></p>
         <p>Totaal aantal stemgerechtigden: <?= $opkomstInfo['totaal_stemgerechtigden']; ?></p>
         <p>Opkomstpercentage: <?= number_format($opkomstInfo['opkomstpercentage'], 2); ?>%</p>
