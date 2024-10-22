@@ -3,7 +3,7 @@
 $servername = "localhost";
 $username = "root";
 $password = "";
-$database = "examenopdracht"; 
+$database = "examenopdracht";
 
 $conn = new mysqli($servername, $username, $password, $database);
 
@@ -12,33 +12,46 @@ if ($conn->connect_error) {
     die("Verbinding mislukt: " . $conn->connect_error);
 }
 
-// Haal verkiezingstypes op voor de dropdown
-$verkiezingstypesSql = "SELECT VerkiezingType_ID, VerkiezingType_Naam FROM verkiezingtypes";
-$verkiezingstypesResult = $conn->query($verkiezingstypesSql);
+// Variabelen om waarden te bewaren na een foutmelding
+$partijnaam = '';
+$partijvolgorde = '';
+$error = '';
 
-// Toevoegen van een nieuwe partij
 if (isset($_POST["submit"])) {
+    // Haal de waarden op uit het formulier
     $partijnaam = $_POST['naam'];
+    $partijvolgorde = $_POST['volgorde'];
 
-    // SQL-query om een nieuwe partij toe te voegen
-    $sql = "INSERT INTO partijen (Partij_Naam) VALUES (?)";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("s", $partijnaam);
+    // Controleer of de volgorde al bestaat
+    $checkSql = "SELECT * FROM partijen WHERE Partij_Volgorde = ?";
+    $stmt = $conn->prepare($checkSql);
+    $stmt->bind_param("i", $partijvolgorde); // Bind volgorde parameter
+    $stmt->execute();
+    $result = $stmt->get_result();
 
-    if ($stmt->execute()) {
-        echo "Partij succesvol toegevoegd!";
+    if ($result->num_rows > 0) {
+        // Als de volgorde al bestaat, sla de foutmelding op
+        $error = "Er bestaat al een partij met dit volgordenummer. Kies een ander nummer.";
     } else {
-        echo "Er is een fout opgetreden bij het toevoegen van de partij.";
+        // Als de volgorde niet bestaat, voeg de partij toe
+        $sql = "INSERT INTO partijen (Partij_Naam, Partij_Volgorde) VALUES (?, ?)";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("si", $partijnaam, $partijvolgorde);
+
+        if ($stmt->execute()) {
+            echo "Partij succesvol toegevoegd!";
+            // Redirect naar de lijstpagina
+            header("Location: read.php");
+            exit;
+        } else {
+            $error = "Er is een fout opgetreden bij het toevoegen van de partij.";
+        }
     }
 
-    // Sluit de statement en de verbinding
     $stmt->close();
-    $conn->close();
-
-    // Redirect naar de lijstpagina
-    header("Location: read.php");
-    exit;
 }
+
+$conn->close();
 ?>
 
 <!DOCTYPE html>
@@ -49,9 +62,18 @@ if (isset($_POST["submit"])) {
 </head>
 <body>
     <h1>Nieuwe Partij Toevoegen</h1>
+
+    <!-- Toon foutmelding als die er is -->
+    <?php if ($error): ?>
+        <p style="color: red;"><?php echo $error; ?></p>
+    <?php endif; ?>
+
     <form method="POST" action="">
         <label for="naam">Naam van de partij:</label>
-        <input type="text" id="naam" name="naam" required>
+        <input type="text" id="naam" name="naam" value="<?php echo htmlspecialchars($partijnaam); ?>" required><br>
+
+        <label for="volgorde">Volgordenummer:</label>
+        <input type="number" id="volgorde" name="volgorde" value="<?php echo htmlspecialchars($partijvolgorde); ?>" required><br>
 
         <input type="submit" name="submit" value="Toevoegen">
     </form>

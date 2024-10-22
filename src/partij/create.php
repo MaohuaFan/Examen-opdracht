@@ -3,7 +3,7 @@
 $servername = "localhost";
 $username = "root";
 $password = "";
-$database = "examenopdracht"; 
+$database = "examenopdracht";
 
 $conn = new mysqli($servername, $username, $password, $database);
 
@@ -15,11 +15,12 @@ if ($conn->connect_error) {
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $partijnaam = $_POST['partijnaam'];
     $partijleider = $_POST['partijleider'];
+    $partijvolgorde = $_POST['volgorde']; // Volgordenummer toevoegen
 
     // SQL-query om een nieuwe partij toe te voegen
-    $sql = "INSERT INTO partijen (Partij_Naam) VALUES (?)";
+    $sql = "INSERT INTO partijen (Partij_Naam, Partij_Volgorde) VALUES (?, ?)";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("s", $partijnaam);
+    $stmt->bind_param("si", $partijnaam, $partijvolgorde); // Bind volgorde toe
 
     if ($stmt->execute()) {
         echo "Nieuwe partij succesvol toegevoegd!";
@@ -47,6 +48,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         <label for="partijleider">Partijleider:</label>
         <input type="text" name="partijleider" required><br>
+
+        <label for="volgorde">Volgorde nummer:</label>
+        <input type="number" name="volgorde" required><br>
 
         <button type="submit">Voeg Partij Toe</button>
     </form>
