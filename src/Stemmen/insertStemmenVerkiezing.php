@@ -42,7 +42,7 @@ $actieveVerkiezingen = $verkiezingen->getActieveVerkiezingen();
             <?php foreach ($actieveVerkiezingen as $verkiezing): ?>
             <tr>
                 <td><?= htmlspecialchars($verkiezing['Naam']); ?></td>
-                <td><?= htmlspecialchars($verkiezing['Verkiezingtype_Naam']); ?></td> <!-- Weergeven van het verkiezingstype -->
+                <td><?= htmlspecialchars($verkiezing['Verkiezingtype_Naam']); ?></td>
                 <td><?= htmlspecialchars($verkiezing['Startdatum']); ?></td>
                 <td><?= htmlspecialchars($verkiezing['Einddatum']); ?></td>
                 <td>
