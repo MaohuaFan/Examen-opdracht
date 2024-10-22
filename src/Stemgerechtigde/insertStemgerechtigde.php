@@ -12,7 +12,7 @@ if (isset($_POST["insert"]) && $_POST["insert"] == "Registreren") {
     $email = $_POST['email'];
     $naam = $_POST['naam'];
     $wachtwoord = $_POST['wachtwoord'];
-    $adres = $_POST['adres'];
+    $Stad = $_POST['Stad'];
     $geboortedatum = $_POST['geboortedatum'];
 
     // Validatie van het BSN-nummer (moet 9 cijfers zijn)
@@ -24,7 +24,7 @@ if (isset($_POST["insert"]) && $_POST["insert"] == "Registreren") {
             echo "Fout: Dit BSN-nummer is al geregistreerd.";
         } else {
             // Maak een instantie van Stemgerechtigde
-            $stemgerechtigde = new Stemgerechtigde($bsnNummer, $email, $naam, $wachtwoord, $adres, $geboortedatum);
+            $stemgerechtigde = new Stemgerechtigde($bsnNummer, $email, $naam, $wachtwoord, $Stad, $geboortedatum);
 
             // Roep de registreer-methode aan
             $insertedId = $stemgerechtigde->registreerStemgerechtigde();
@@ -67,8 +67,8 @@ if (isset($_POST["insert"]) && $_POST["insert"] == "Registreren") {
         <label for="wachtwoord">Wachtwoord:</label>
         <input type="password" id="wachtwoord" name="wachtwoord" required/><br>
 
-        <label for="adres">Adres:</label>
-        <input type="text" id="adres" name="adres"/><br>
+        <label for="Stad">Stad:</label>
+        <input type="text" id="Stad" name="Stad"/><br>
 
         <label for="geboortedatum">Geboortedatum:</label>
         <input type="date" id="geboortedatum" name="geboortedatum" required/><br>

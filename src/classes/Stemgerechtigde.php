@@ -15,27 +15,27 @@ class Stemgerechtigde extends Database {
     protected $email; // Voeg de email toe
     protected $naam;
     protected $wachtwoord;
-    protected $adres;
+    protected $Stad;
     protected $geboortedatum;
 
     // Constructor
-    public function __construct($bsnNummer, $email, $naam, $wachtwoord, $adres, $geboortedatum) {
+    public function __construct($bsnNummer, $email, $naam, $wachtwoord, $Stad, $geboortedatum) {
         parent::__construct(); // Roept de constructor van de Database-klasse aan
         $this->bsnNummer = $bsnNummer;
         $this->email = $email; // Correcte toewijzing van email
         $this->naam = $naam;
         $this->wachtwoord = $wachtwoord; // Bewaar het wachtwoord als gewone tekst
-        $this->adres = $adres;
+        $this->Stad = $Stad;
         $this->geboortedatum = $geboortedatum;
     }
 
     // Methode om een stemgerechtigde te registreren
     public function registreerStemgerechtigde() {
-        $query = "INSERT INTO stemgerechtigden (bsn_nummer, email, naam, wachtwoord, adres, geboortedatum) VALUES (?, ?, ?, ?, ?, ?)";
+        $query = "INSERT INTO stemgerechtigden (bsn_nummer, email, naam, wachtwoord, Stad, geboortedatum) VALUES (?, ?, ?, ?, ?, ?)";
 
         try {
             $stmt = $this->getConnection()->prepare($query);
-            $stmt->execute([$this->bsnNummer, $this->email, $this->naam, $this->wachtwoord, $this->adres, $this->geboortedatum]);
+            $stmt->execute([$this->bsnNummer, $this->email, $this->naam, $this->wachtwoord, $this->Stad, $this->geboortedatum]);
 
             return $this->getConnection()->lastInsertId(); // Retourneert het ID van de geregistreerde stemgerechtigde
         } catch (PDOException $e) {
