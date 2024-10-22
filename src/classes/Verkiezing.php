@@ -124,26 +124,26 @@ class Verkiezing extends Database {
     }
 
     public function getOpkomstPercentage($stad, $verkiezingId) {
-        $query = "
-            SELECT
-                COUNT(s.stemgerechtigde_id) AS aantal_uitgebrachte_stemmen,
-                (SELECT COUNT(*) FROM stemgerechtigden WHERE stad = :stad) AS totaal_stemgerechtigden,
-                (COUNT(s.stemgerechtigde_id) / (SELECT COUNT(*) FROM stemgerechtigden WHERE stad = :stad)) * 100 AS opkomstpercentage
-            FROM stemmen s
-            JOIN stemgerechtigden g ON s.stemgerechtigde_id = g.stemgerechtigde_id
-            WHERE g.stad = :stad
-            AND s.verkiezing_id = :verkiezingId";
-        
-        try {
-            $stmt = $this->getConnection()->prepare($query);
-            $stmt->bindParam(':stad', $stad);
-            $stmt->bindParam(':verkiezingId', $verkiezingId);
-            $stmt->execute();
-            return $stmt->fetch(PDO::FETCH_ASSOC);
-        } catch (PDOException $e) {
-            return false;
-        }
+        $query = "SELECT COUNT(*) as aantal_uitgebrachte_stemmen, 
+                         (SELECT COUNT(*) FROM stemgerechtigden WHERE Stad = :stad) as totaal_stemgerechtigden 
+                  FROM stemmen 
+                  WHERE Verkiezing_ID = :verkiezing_id AND Stemgerechtigde_Adres = :stad"; // Pas dit aan
+                  
+        $stmt = $this->getConnection()->prepare($query);
+        $stmt->bindParam(':stad', $stad);
+        $stmt->bindParam(':verkiezing_id', $verkiezingId);
+        $stmt->execute();
+    
+        return $stmt->fetch(PDO::FETCH_ASSOC);
     }
+
+    public function getAlleSteden() {
+        $query = "SELECT DISTINCT Stad FROM stemgerechtigden"; // Zorg ervoor dat deze tabel de juiste kolom heeft
+        $stmt = $this->getConnection()->prepare($query);
+        $stmt->execute();
+    
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    } 
 
     public function getAlleVerkiezingen() {
     $query = "SELECT Verkiezing_ID, Verkiezing_Naam, is_gepubliceerd FROM verkiezingen";
