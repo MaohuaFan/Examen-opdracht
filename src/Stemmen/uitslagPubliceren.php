@@ -36,6 +36,9 @@ if (isset($_POST['verkiezing_id'])) {
     <title>Uitslag Publiceren</title>
 </head>
 <body>
+<header>
+        <?php include '../nav.php'; ?>
+    </header>
     <h1>Verkiezingsuitslag Publiceren</h1>
 
     <?php if (isset($errorMessage)): ?>

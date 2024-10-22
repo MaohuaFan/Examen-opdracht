@@ -24,6 +24,9 @@ if (isset($_POST['stad']) && isset($_POST['verkiezing_id'])) {
     <title>Opkomst Percentage</title>
 </head>
 <body>
+<header>
+        <?php include '../nav.php'; ?>
+    </header>
     <h1>Opkomst Percentage Per Stad</h1>
     <form method="post" action="">
         <label for="stad">Selecteer Stad:</label>
