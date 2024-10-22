@@ -1,4 +1,8 @@
-<?php include '../nav.php'; // Navigatiebalk ?>
+<?php 
+ session_start();
+ require_once '../../vendor/autoload.php';
+include '../nav.php'; // Navigatiebalk 
+?>
 
 <?php
 // Directory waar de pagina's zijn opgeslagen

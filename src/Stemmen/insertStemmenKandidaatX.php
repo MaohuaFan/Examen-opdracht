@@ -17,7 +17,7 @@ $stemgerechtigdeId = $_SESSION['user_id'];
 $kandidaten = new Kandidaat("", "", "","", 0);
 $kandidatenLijst = $kandidaten->getKandidatenVoorVerkiezing($verkiezingId);
 
-if (isset($_POST['kandidaat_id'])) {
+if (isset($_POST['insert']) && $_POST['insert'] == "Stem Uitbrengen") {
     $kandidaatId = $_POST['kandidaat_id'];
 
     // Maak een instantie van Stem
@@ -53,32 +53,22 @@ if (isset($_POST['kandidaat_id'])) {
         <?php include '../nav.php'; ?>
     </header>
     <h1>Selecteer een Kandidaat</h1>
+    <form action="" method="post">
+        <input type="hidden" name="verkiezing_id" value="<?= htmlspecialchars($verkiezingId); ?>">
+        <input type="hidden" name="stemgerechtigde_id" value="<?= htmlspecialchars($stemgerechtigdeId); ?>">
 
-    <table border="1">
-        <thead>
-            <tr>
-                <th>Partij</th>
-                <th>Kandidaat</th>
-                <th>Actie</th>
-            </tr>
-        </thead>
-        <tbody>
+        <label for="kandidaat_id">Kandidaat:</label>
+        <select name="kandidaat_id" id="kandidaat_id" required>
+            <option value="">Selecteer een kandidaat</option>
             <?php foreach ($kandidatenLijst as $kandidaat): ?>
-            <tr>
-                <td><?= htmlspecialchars($kandidaat['PartijNaam']); ?></td>
-                <td><?= htmlspecialchars($kandidaat['KandidaatNaam']); ?></td>
-                <td>
-                    <form action="" method="post">
-                        <input type="hidden" name="verkiezing_id" value="<?= htmlspecialchars($verkiezingId); ?>">
-                        <input type="hidden" name="kandidaat_id" value="<?= htmlspecialchars($kandidaat['Kandidaat_ID']); ?>">
-                        <input type="submit" value="Stem">
-                    </form>
-                </td>
-            </tr>
+                <option value="<?= htmlspecialchars($kandidaat['Kandidaat_ID']); ?>">
+                    <?= htmlspecialchars($kandidaat['PartijNaam'] . ' - ' . $kandidaat['KandidaatNaam']); ?>
+                </option>
             <?php endforeach; ?>
-        </tbody>
-    </table>
+        </select>
 
+        <input type="submit" name="insert" value="Stem Uitbrengen">
+    </form>
     <a href="insertStemmenVerkiezing.php">Terug naar Verkiezingen</a>
 </body>
 </html>

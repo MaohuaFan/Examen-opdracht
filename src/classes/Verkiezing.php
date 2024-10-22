@@ -159,7 +159,12 @@ class Verkiezing extends Database {
 
 
     public function getActieveVerkiezingen() {
-        $query = "SELECT * FROM verkiezingen WHERE :huidigeDatum BETWEEN Startdatum AND Einddatum";
+        // Query om actieve verkiezingen samen met hun verkiezingstype op te halen
+        $query = "SELECT verkiezingen.Naam, verkiezingen.Startdatum, verkiezingen.Einddatum, verkiezingtypes.Verkiezingtype_Naam, Verkiezingen.Verkiezing_ID
+                FROM verkiezingen
+                JOIN verkiezingtypes ON verkiezingen.Verkiezingtype_ID = verkiezingtypes.Verkiezingtype_ID
+                WHERE :huidigeDatum BETWEEN verkiezingen.Startdatum AND verkiezingen.Einddatum";
+                
         $huidigeDatum = date('Y-m-d');
         
         try {
@@ -167,11 +172,13 @@ class Verkiezing extends Database {
             $stmt->bindParam(':huidigeDatum', $huidigeDatum);
             $stmt->execute();
 
-            return $stmt->fetchAll(PDO::FETCH_ASSOC); // Retourneer alle actieve verkiezingen
+            return $stmt->fetchAll(PDO::FETCH_ASSOC); // Retourneer alle actieve verkiezingen met type
         } catch (PDOException $e) {
             return [];
         }
     }
+
+
 
 
     // public function Dropdown_Verkiezing($selectedId = null) {

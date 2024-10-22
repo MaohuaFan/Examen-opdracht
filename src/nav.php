@@ -30,6 +30,9 @@
             <li class="nav-item">
                 <a class="nav-link" href="../Stemmen/insertStemmenVerkiezing.php">Stemmen</a>
             </li>
+            <li>
+             <a class="nav-link" href="../goedkeuren_partijen/test.php">goedkeuren_partijen</a>
+            </li>
             <?php if (isset($_SESSION['user_id'])): ?>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
