@@ -9,7 +9,7 @@ if (!isset($_SESSION['user_id'])) {
     exit;
 }
 
-// Verkrijg de actieve verkiezingen
+// Verkrijg de actieve verkiezingen, inclusief verkiezingstype
 $verkiezingen = new Verkiezing("", "", "", 0);
 $actieveVerkiezingen = $verkiezingen->getActieveVerkiezingen();
 ?>
@@ -32,6 +32,7 @@ $actieveVerkiezingen = $verkiezingen->getActieveVerkiezingen();
         <thead>
             <tr>
                 <th>Verkiezing</th>
+                <th>Verkiezingstype</th> <!-- Toegevoegd: Verkiezingstype -->
                 <th>Startdatum</th>
                 <th>Einddatum</th>
                 <th>Actie</th>
@@ -41,6 +42,7 @@ $actieveVerkiezingen = $verkiezingen->getActieveVerkiezingen();
             <?php foreach ($actieveVerkiezingen as $verkiezing): ?>
             <tr>
                 <td><?= htmlspecialchars($verkiezing['Naam']); ?></td>
+                <td><?= htmlspecialchars($verkiezing['Verkiezingtype_Naam']); ?></td> <!-- Weergeven van het verkiezingstype -->
                 <td><?= htmlspecialchars($verkiezing['Startdatum']); ?></td>
                 <td><?= htmlspecialchars($verkiezing['Einddatum']); ?></td>
                 <td>
