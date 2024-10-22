@@ -1,7 +1,7 @@
 <?php 
  session_start();
  require_once '../../vendor/autoload.php';
-include '../nav.php'; // Navigatiebalk 
+ include '../nav.php'; // Navigatiebalk 
 ?>
 
 
