@@ -27,17 +27,31 @@ $actieveVerkiezingen = $verkiezingen->getActieveVerkiezingen();
         <?php include '../nav.php'; ?>
     </header>
     <h1>Selecteer een Verkiezing</h1>
-    <form action="insertStemmenKandidaat.php" method="post">
-        <label for="verkiezing_id">Verkiezing:</label>
-        <select name="verkiezing_id" id="verkiezing_id" required>
-            <option value="">Selecteer een verkiezing</option>
+
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Verkiezing</th>
+                <th>Startdatum</th>
+                <th>Einddatum</th>
+                <th>Actie</th>
+            </tr>
+        </thead>
+        <tbody>
             <?php foreach ($actieveVerkiezingen as $verkiezing): ?>
-                <option value="<?= htmlspecialchars($verkiezing['Verkiezing_ID']); ?>">
-                    <?= htmlspecialchars($verkiezing['Naam'] . ' (' . $verkiezing['Startdatum'] . ' - ' . $verkiezing['Einddatum'] . ')'); ?>
-                </option>
+            <tr>
+                <td><?= htmlspecialchars($verkiezing['Naam']); ?></td>
+                <td><?= htmlspecialchars($verkiezing['Startdatum']); ?></td>
+                <td><?= htmlspecialchars($verkiezing['Einddatum']); ?></td>
+                <td>
+                    <form action="insertStemmenKandidaat.php" method="post">
+                        <input type="hidden" name="verkiezing_id" value="<?= htmlspecialchars($verkiezing['Verkiezing_ID']); ?>">
+                        <input type="submit" value="Stem">
+                    </form>
+                </td>
+            </tr>
             <?php endforeach; ?>
-        </select>
-        <input type="submit" value="Ga Verder">
-    </form>
+        </tbody>
+    </table>
 </body>
 </html>
