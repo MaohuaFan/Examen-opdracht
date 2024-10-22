@@ -19,7 +19,7 @@ if (isset($_POST['verkiezing_id'])) {
     $verkiezingId = $_POST['verkiezing_id'];
 
     // Maak een instantie van Verkiezing
-    $verkiezing = new Verkiezing();
+    $verkiezing = new Verkiezing("","","","",0);
 
     // Publiceer de uitslag
     if ($verkiezing->publiceerUitslag($verkiezingId)) {

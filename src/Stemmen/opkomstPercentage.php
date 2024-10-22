@@ -1,8 +1,6 @@
 <?php
 session_start();
-
 require_once '../../vendor/autoload.php';
-
 use Examenopdracht\classes\Verkiezing;
 
 // Controleer of de gebruiker een medewerker is
@@ -11,7 +9,10 @@ use Examenopdracht\classes\Verkiezing;
 //     exit;
 // }
 
-$verkiezing = new Verkiezing("","","","",0);
+$verkiezing = new Verkiezing("", "", "", 0);
+
+// Haal de steden op
+$steden = $verkiezing->getAlleSteden();
 
 if (isset($_POST['stad']) && isset($_POST['verkiezing_id'])) {
     $stad = $_POST['stad'];
@@ -20,6 +21,7 @@ if (isset($_POST['stad']) && isset($_POST['verkiezing_id'])) {
     $opkomstInfo = $verkiezing->getOpkomstPercentage($stad, $verkiezingId);
 }
 ?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -31,7 +33,14 @@ if (isset($_POST['stad']) && isset($_POST['verkiezing_id'])) {
     <h1>Opkomst Percentage Per Stad</h1>
     <form method="post" action="">
         <label for="stad">Selecteer Stad:</label>
-        <input type="text" name="stad" id="stad" required>
+        <select name="stad" id="stad" required>
+            <option value="">Selecteer een stad</option>
+            <?php foreach ($steden as $stad): ?>
+                <option value="<?= htmlspecialchars($stad['Stad']); ?>">
+                    <?= htmlspecialchars($stad['Stad']); ?>
+                </option>
+            <?php endforeach; ?>
+        </select>
         
         <label for="verkiezing_id">Selecteer Verkiezing:</label>
         <select name="verkiezing_id" id="verkiezing_id">

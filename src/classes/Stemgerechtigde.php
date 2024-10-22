@@ -99,5 +99,7 @@ class Stemgerechtigde extends Database {
     return $html;
 }
 
+
+
 }
 ?>
