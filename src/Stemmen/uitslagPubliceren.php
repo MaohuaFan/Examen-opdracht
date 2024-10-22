@@ -11,10 +11,23 @@ use Examenopdracht\classes\Verkiezing;
 //     exit;
 // }
 
-$verkiezing = new Verkiezing("","","","",0);
+$verkiezing = new Verkiezing("", "", "", 0);
 $verkiezingen = $verkiezing->getAlleVerkiezingen(); // Haal alle verkiezingen op
 
+// Controleer of een verkiezing is geselecteerd voor publicatie
+if (isset($_POST['verkiezing_id'])) {
+    $verkiezingId = $_POST['verkiezing_id'];
+
+    // Publiceer de uitslag
+    if ($verkiezing->publiceerUitslag($verkiezingId)) {
+        echo"Uitslag succesvol gepubliceerd!";
+        // exit;
+    } else {
+        $errorMessage = "Fout bij het publiceren van de uitslag.";
+    }
+}
 ?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -24,7 +37,12 @@ $verkiezingen = $verkiezing->getAlleVerkiezingen(); // Haal alle verkiezingen op
 </head>
 <body>
     <h1>Verkiezingsuitslag Publiceren</h1>
-    <form method="post" action="publiceerUitslag.php">
+
+    <?php if (isset($errorMessage)): ?>
+        <p style='color: red;'><?= htmlspecialchars($errorMessage); ?></p>
+    <?php endif; ?>
+
+    <form method="post" action="">
         <label for="verkiezing_id">Selecteer Verkiezing:</label>
         <select name="verkiezing_id" id="verkiezing_id">
             <?php foreach ($verkiezingen as $verkiezing) : ?>

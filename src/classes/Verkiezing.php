@@ -123,19 +123,46 @@ class Verkiezing extends Database {
         }
     }
 
-    public function getOpkomstPercentage($stad, $verkiezingId) {
-        $query = "SELECT COUNT(*) as aantal_uitgebrachte_stemmen, 
-                         (SELECT COUNT(*) FROM stemgerechtigden WHERE Stad = :stad) as totaal_stemgerechtigden 
+    public function getAantalUitgebrachteStemmen($verkiezingId, $stad) {
+        $query = "SELECT COUNT(*) as aantal_uitgebrachte_stemmen 
                   FROM stemmen 
-                  WHERE Verkiezing_ID = :verkiezing_id AND Stemgerechtigde_Adres = :stad"; // Pas dit aan
-                  
+                  JOIN stemgerechtigden ON stemmen.Stemgerechtigde_ID = stemgerechtigden.Stemgerechtigde_ID 
+                  WHERE Verkiezing_ID = :verkiezing_id AND stemgerechtigden.Stad = :stad";
+        
+        $stmt = $this->getConnection()->prepare($query);
+        $stmt->bindParam(':verkiezing_id', $verkiezingId);
+        $stmt->bindParam(':stad', $stad);
+        $stmt->execute();
+
+        return $stmt->fetchColumn(); // Retourneer alleen het aantal uitgebrachte stemmen
+    }
+
+    public function getTotaalStemgerechtigden($stad) {
+        $query = "SELECT COUNT(*) as totaal_stemgerechtigden 
+                  FROM stemgerechtigden 
+                  WHERE Stad = :stad";
+        
         $stmt = $this->getConnection()->prepare($query);
         $stmt->bindParam(':stad', $stad);
-        $stmt->bindParam(':verkiezing_id', $verkiezingId);
         $stmt->execute();
-    
-        return $stmt->fetch(PDO::FETCH_ASSOC);
+
+        return $stmt->fetchColumn(); // Retourneer alleen het totaal aantal stemgerechtigden
     }
+
+    public function getOpkomstPercentage($stad, $verkiezingId) {
+        $aantalStemmen = $this->getAantalUitgebrachteStemmen($verkiezingId, $stad);
+        $totaalStemgerechtigden = $this->getTotaalStemgerechtigden($stad);
+        
+        // Bereken het opkomstpercentage
+        $opkomstpercentage = $totaalStemgerechtigden > 0 ? ($aantalStemmen / $totaalStemgerechtigden) * 100 : 0;
+
+        return [
+            'aantal_uitgebrachte_stemmen' => $aantalStemmen,
+            'totaal_stemgerechtigden' => $totaalStemgerechtigden,
+            'opkomstpercentage' => $opkomstpercentage
+        ];
+    }
+
 
     public function getAlleSteden() {
         $query = "SELECT DISTINCT Stad FROM stemgerechtigden"; // Zorg ervoor dat deze tabel de juiste kolom heeft
@@ -146,7 +173,7 @@ class Verkiezing extends Database {
     } 
 
     public function getAlleVerkiezingen() {
-    $query = "SELECT Verkiezing_ID, Verkiezing_Naam, is_gepubliceerd FROM verkiezingen";
+    $query = "SELECT Verkiezing_ID, Naam as Verkiezing_Naam, is_gepubliceerd FROM verkiezingen";
     
     try {
         $stmt = $this->getConnection()->prepare($query);
