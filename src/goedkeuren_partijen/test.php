@@ -1,3 +1,10 @@
+<?php 
+ session_start();
+ require_once '../../vendor/autoload.php';
+include '../nav.php'; // Navigatiebalk 
+?>
+
+
 <?php
 // src/goedkeuren_partijen/test.php
 
