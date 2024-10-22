@@ -41,7 +41,7 @@ $result = $conn->query($sql);
     <br><br>
     <table border="1">
         <tr>
-            <!-- Verwijder de ID-kolom -->
+      
             <th>Partijnaam</th>
             <th>Volgorde</th>
             <th>Acties</th>
