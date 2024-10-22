@@ -111,17 +111,14 @@ class Verkiezing extends Database {
     }
 
     public function publiceerUitslag($verkiezingId) {
-        $query = "UPDATE verkiezingen SET is_gepubliceerd = 1 WHERE Verkiezing_ID = :verkiezingId";
+        $query = "UPDATE verkiezingen SET is_gepubliceerd = 1 WHERE Verkiezing_ID = :verkiezing_id";
         
-        try {
-            $stmt = $this->getConnection()->prepare($query);
-            $stmt->bindParam(':verkiezingId', $verkiezingId);
-            $stmt->execute();
-            return true;
-        } catch (PDOException $e) {
-            return false;
-        }
+        $stmt = $this->getConnection()->prepare($query);
+        $stmt->bindParam(':verkiezing_id', $verkiezingId);
+        
+        return $stmt->execute(); // Dit geeft true of false terug afhankelijk van het succes van de query
     }
+    
 
     public function getAantalUitgebrachteStemmen($verkiezingId, $stad) {
         $query = "SELECT COUNT(*) as aantal_uitgebrachte_stemmen 

@@ -69,10 +69,16 @@ class Kandidaat extends Database {
     }
 
     public function getKandidatenVoorVerkiezing($verkiezingId) {
-        $query = "SELECT kandidaten.Kandidaat_ID, kandidaten.Kandidaat_Naam as KandidaatNaam, partijen.Partij_Naam as PartijNaam
-                  FROM kandidaten
-                  JOIN partijen ON kandidaten.Partij_ID = partijen.Partij_ID
-				  WHERE kandidaten.Verkiesbaar = 1";
+        // $query = "SELECT kandidaten.Kandidaat_ID, kandidaten.Kandidaat_Naam as KandidaatNaam, partijen.Partij_Naam as PartijNaam
+        //           FROM kandidaten
+        //           JOIN partijen ON kandidaten.Partij_ID = partijen.Partij_ID
+		// 		  WHERE kandidaten.Verkiesbaar = 1";
+        $query = "SELECT kandidaten.Kandidaat_ID, kandidaten.Kandidaat_Naam as KandidaatNaam, partijen.Partij_Naam  as PartijNaam
+                  FROM kandidaten 
+                  JOIN partijen ON kandidaten.Partij_ID = partijen.Partij_ID 
+                  WHERE kandidaten.Verkiesbaar = 1
+                  AND partijen.Goedkeuring_Status = 'goedgekeurd'
+                  ORDER BY partijen.Partij_Volgorde ASC";
         
         try {
             $stmt = $this->getConnection()->prepare($query);
