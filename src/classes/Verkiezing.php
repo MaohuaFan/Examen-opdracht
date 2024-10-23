@@ -116,7 +116,7 @@ class Verkiezing extends Database {
         $stmt = $this->getConnection()->prepare($query);
         $stmt->bindParam(':verkiezing_id', $verkiezingId);
         
-        return $stmt->execute(); // Dit geeft true of false terug afhankelijk van het succes van de query
+        return $stmt->execute();
     }
     
 
@@ -131,38 +131,46 @@ class Verkiezing extends Database {
         $stmt->bindParam(':stad', $stad);
         $stmt->execute();
 
-        return $stmt->fetchColumn(); // Retourneer alleen het aantal uitgebrachte stemmen
+        return $stmt->fetchColumn();
     }
 
-    public function getTotaalStemgerechtigden($stad) {
+    public function getTotaalStemgerechtigden($stad, $verkiezingId) {
         $query = "SELECT COUNT(*) as totaal_stemgerechtigden 
                   FROM stemgerechtigden 
-                  WHERE Stad = :stad";
+                  JOIN stemmen ON stemgerechtigden.Stemgerechtigde_ID = stemmen.Stemgerechtigde_ID 
+                  WHERE stemgerechtigden.Stad = :stad 
+                  AND stemmen.Verkiezing_ID = :verkiezing_id";
         
         $stmt = $this->getConnection()->prepare($query);
         $stmt->bindParam(':stad', $stad);
+        $stmt->bindParam(':verkiezing_id', $verkiezingId);
         $stmt->execute();
-
-        return $stmt->fetchColumn(); // Retourneer alleen het totaal aantal stemgerechtigden
+    
+        return $stmt->fetchColumn();
     }
+    
 
     public function getOpkomstPercentage($stad, $verkiezingId) {
+        // Haal het aantal uitgebrachte stemmen op voor de opgegeven stad en verkiezing
         $aantalStemmen = $this->getAantalUitgebrachteStemmen($verkiezingId, $stad);
-        $totaalStemgerechtigden = $this->getTotaalStemgerechtigden($stad);
+        
+        // Haal het totaal aantal stemgerechtigden op voor de opgegeven stad en verkiezing
+        $totaalStemgerechtigden = $this->getTotaalStemgerechtigden($stad, $verkiezingId);
         
         // Bereken het opkomstpercentage
         $opkomstpercentage = $totaalStemgerechtigden > 0 ? ($aantalStemmen / $totaalStemgerechtigden) * 100 : 0;
-
+    
         return [
             'aantal_uitgebrachte_stemmen' => $aantalStemmen,
             'totaal_stemgerechtigden' => $totaalStemgerechtigden,
             'opkomstpercentage' => $opkomstpercentage
         ];
     }
+    
 
 
     public function getAlleSteden() {
-        $query = "SELECT DISTINCT Stad FROM stemgerechtigden"; // Zorg ervoor dat deze tabel de juiste kolom heeft
+        $query = "SELECT DISTINCT Stad FROM stemgerechtigden";
         $stmt = $this->getConnection()->prepare($query);
         $stmt->execute();
     
@@ -187,7 +195,7 @@ class Verkiezing extends Database {
         $query = "SELECT verkiezingen.Naam, verkiezingen.Startdatum, verkiezingen.Einddatum, verkiezingtypes.Verkiezingtype_Naam, Verkiezingen.Verkiezing_ID
                 FROM verkiezingen
                 JOIN verkiezingtypes ON verkiezingen.Verkiezingtype_ID = verkiezingtypes.Verkiezingtype_ID
-                WHERE :huidigeDatum BETWEEN verkiezingen.Startdatum AND verkiezingen.Einddatum";
+                WHERE :huidigeDatum BETWEEN verkiezingen.Startdatum AND verkiezingen.Einddatum AND verkiezingen.is_gepubliceerd = 0";
                 
         $huidigeDatum = date('Y-m-d');
         
@@ -196,42 +204,11 @@ class Verkiezing extends Database {
             $stmt->bindParam(':huidigeDatum', $huidigeDatum);
             $stmt->execute();
 
-            return $stmt->fetchAll(PDO::FETCH_ASSOC); // Retourneer alle actieve verkiezingen met type
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
             return [];
         }
     }
-
-
-
-
-    // public function Dropdown_Verkiezing($selectedId = null) {
-    //     // Haal verkiezingen op
-    //     $verkiezingen = $this->getVerkiezing();
-        
-    //     // Begin met het genereren van de HTML voor de dropdown
-    //     $html = '<select id="verkiezing_id" name="verkiezing_id" required>';
-    //     $html .= '<option value="" disabled ' . (is_null($selectedId) ? 'selected' : '') . '>Kies een verkiezing</option>';
-        
-    //     // Controleer of er verkiezingen zijn
-    //     if (!empty($verkiezingen)) {
-    //         // Loop door de verkiezingen en voeg opties toe
-    //         foreach ($verkiezingen as $verk) {
-    //             $isSelected = ($selectedId == $verk['Verkiezing_ID']) ? 'selected' : '';
-    //             $html .= '<option value="' . htmlspecialchars($verk['Verkiezing_ID']) . '" ' . $isSelected . '>';
-    //             $html .= htmlspecialchars($verk['Naam']);
-    //             $html .= '</option>';
-    //         }
-    //     } else {
-    //         // Voeg een optie toe als er geen verkiezingen zijn
-    //         $html .= '<option value="">Geen verkiezingen beschikbaar</option>';
-    //     }
-    
-    //     $html .= '</select><br>';
-    
-    //     // Retourneer de HTML voor de dropdown
-    //     return $html;
-    // }
     
 }
 ?>

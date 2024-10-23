@@ -9,7 +9,7 @@ $verkiezing = new Verkiezing("", "", "", 0);
 $steden = $verkiezing->getAlleSteden();
 
 if (isset($_POST['stad']) && isset($_POST['verkiezing_id'])) {
-    $stad = $_POST['stad']; // Dit is de geselecteerde stad
+    $stad = $_POST['stad'];
     $verkiezingId = $_POST['verkiezing_id'];
     
     $opkomstInfo = $verkiezing->getOpkomstPercentage($stad, $verkiezingId);
